@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>悬停出线 – 两种实现</title>
+<style>
+/* ========= 通用排版 ========= */
+body{
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: #f4f6fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    gap: 60px;
+    flex-wrap: wrap;
+}
+.demo-box{
+    background: #fff;
+    padding: 40px 50px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.08);
+    text-align: center;
+}
+h3{
+    margin-top: 0;
+    font-size: 18px;
+    color: #666;
+}
+
+/* ========= 方法1：纯边框版 ========= */
+.method1{
+    display: inline-block;
+    font-size: 20px;
+    color: #333;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;  /* 占位但透明 */
+    transition: border-color .35s;
+}
+.method1:hover{
+    border-bottom-color: #1890ff;          /* 上色即可 */
+}
+
+/* ========= 方法2：伪元素伸长版 ========= */
+.method2{
+    position: relative;
+    font-size: 20px;
+    color: #333;
+    text-decoration: none;
+}
+.method2::after{
+    content: '';
+    position: absolute;
+    left: 50%;                 /* 从中间开始 */
+    bottom: -4px;
+    width: 0;
+    height: 2px;
+    background: #1890ff;
+    transition: all .35s;
+}
+.method2:hover::after{
+    left: 0;                   /* 展开至全长 */
+    width: 100%;
+}
+</style>
+
+</head>
+<body>
+    <!-- 方法1 -->
+    <div class="demo-box">
+        <h3>方法1：纯边框</h3>
+        <a class="method1" href="#">鼠标放上来，底部出现一条线</a>
+    </div>
+
+    <!-- 方法2 -->
+    <div class="demo-box">
+        <h3>方法2：伪元素伸长</h3>
+        <a class="method2" href="#">鼠标放上来，线条从中间向两边伸长</a>
+    </div>
+</body>
+</html>

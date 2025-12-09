@@ -1,0 +1,288 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Test06",
+            "request": "launch",
+            "mainClass": "lesson08.Test06",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "HomeWork",
+            "request": "launch",
+            "mainClass": "lesson07.HomeWork",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "test",
+            "request": "launch",
+            "mainClass": "lesson07.test",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "assignment1",
+            "request": "launch",
+            "mainClass": "lesson07.assignment1",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "hello",
+            "request": "launch",
+            "mainClass": "hello",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "assignment2",
+            "request": "launch",
+            "mainClass": "lesson06.assignment2",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "TestArray",
+            "request": "launch",
+            "mainClass": "lesson05.TestArray",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "GuessPointGame",
+            "request": "launch",
+            "mainClass": "lesson05.GuessPointGame",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "RandNumTest",
+            "request": "launch",
+            "mainClass": "lesson05.RandNumTest",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "TestPackageClass",
+            "request": "launch",
+            "mainClass": "lesson05.TestPackageClass",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "assignment1",
+            "request": "launch",
+            "mainClass": "lesson06.assignment1",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "AAA",
+            "request": "launch",
+            "mainClass": "lesson04.AAA",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "basic1",
+            "request": "launch",
+            "mainClass": "lesson01.basic1",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "TestPerson",
+            "request": "launch",
+            "mainClass": "TestPerson",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "ATM",
+            "request": "launch",
+            "mainClass": "lesson04.ATM",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "TestForTrafficTools",
+            "request": "launch",
+            "mainClass": "lesson04.TestForTrafficTools",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "Test",
+            "request": "launch",
+            "mainClass": "lesson04.Test",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "TestPerson",
+            "request": "launch",
+            "mainClass": "lesson04.TestPerson",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "TestMT",
+            "request": "launch",
+            "mainClass": "TestMT",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "idCardCheck",
+            "request": "launch",
+            "mainClass": "lesson02.idCardCheck",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "IdCardCheck",
+            "request": "launch",
+            "mainClass": "lesson02.IdCardCheck",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "ForSale",
+            "request": "launch",
+            "mainClass": "lesson02.ForSale",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "CountAndSumNum",
+            "request": "launch",
+            "mainClass": "lesson03.CountAndSumNum",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "ChectChar",
+            "request": "launch",
+            "mainClass": "lesson03.ChectChar",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "test",
+            "request": "launch",
+            "mainClass": "test",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "TestSc",
+            "request": "launch",
+            "mainClass": "lesson03.TestSc",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "task01",
+            "request": "launch",
+            "mainClass": "lesson03.task01",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "challenge",
+            "request": "launch",
+            "mainClass": "JavaSe.week1.challenge",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "improve3",
+            "request": "launch",
+            "mainClass": "JavaSe.week1.improve3",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "improve2",
+            "request": "launch",
+            "mainClass": "JavaSe.week1.improve2",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "improve1",
+            "request": "launch",
+            "mainClass": "JavaSe.week1.improve1",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "basic2",
+            "request": "launch",
+            "mainClass": "JavaSe.week1.basic2",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "type": "java",
+            "name": "basic1",
+            "request": "launch",
+            "mainClass": "JavaSe.week1.basic1",
+            "projectName": "code for vs code_ad22c1a0"
+        },
+        {
+            "name": "C/C++: gcc.exe 生成活动文件",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:/Program Files/mingw64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "将反汇编风格设置为 Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "C/C++: gcc.exe 生成活动文件"
+        },
+        {
+            "name": "C/C++: g++.exe 构建和调试活动文件",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+            "args": [],
+            "stopAtEntry": true,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:\\Program Files\\mingw64\\bin\\gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "将反汇编风格设置为 Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "C/C++: g++.exe 生成活动文件"
+        }
+    ]
+}

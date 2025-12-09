@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>CSV 前 5 行预览</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --primary:#667eea;
+  --primary-dark:#5a67d8;
+  --radius:12px;
+  --shadow:0 8px 20px rgba(0,0,0,.08);
+}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+  /* 柔和蓝紫渐变背景 */
+  background:linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%) ;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.container{
+  width:90%;
+  max-width:640px;
+  background:#fff;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:40px 50px;
+  box-sizing:border-box;
+}
+h1{
+  text-align:center;
+  color:var(--primary);
+  font-size:28px;
+  margin-bottom:30px;
+}
+/* 拖拽区 */
+.drop-zone{
+  border:2px dashed var(--primary);
+  border-radius:var(--radius);
+  padding:60px 20px;
+  text-align:center;
+  cursor:pointer;
+  transition:.3s;
+}
+.drop-zone.dragover{
+  border-color:var(--primary-dark);
+  background:#eef2ff;
+}
+.drop-zone .icon{
+  font-size:48px;
+  color:var(--primary);
+  margin-bottom:10px;
+}
+.drop-zone .hint{
+  color:#888;
+  font-size:14px;
+  margin-top:8px;
+}
+input[type=file]{
+  display:none;
+}
+button{
+  background:var(--primary);
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  padding:10px 24px;
+  font-size:16px;
+  cursor:pointer;
+  transition:.3s;
+}
+button:hover{
+  background:var(--primary-dark);
+}
+/* 结果区 */
+.result{
+  margin-top:30px;
+  display:none;
+}
+.result pre{
+  background:#f6f8fa;
+  border:1px solid #e1e4e8;
+  border-radius:6px;
+  padding:18px;
+  font-size:14px;
+  line-height:1.45;
+  overflow:auto;
+}
+/* 加载动画 */
+.spinner{
+  width:40px;
+  height:40px;
+  margin:0 auto 10px;
+  border:4px solid #f3f3f3;
+  border-top-color:var(--primary);
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{
+  to{transform:rotate(360deg);}
+}
+.loading{
+  text-align:center;
+  color:#555;
+}
+.error{
+  color:#e53e3e;
+  font-size:14px;
+  margin-top:10px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>CSV 前 5 行预览</h1>
+
+  <div class="drop-zone" id="dropZone">
+    <div class="icon">📁</div>
+    <div>拖拽或点击选择 CSV 文件</div>
+    <div class="hint">仅支持 .csv 格式</div>
+    <input type="file" id="fileInput" accept=".csv">
+  </div>
+
+  <div class="loading" id="loading" style="display:none">
+    <div class="spinner"></div>
+    <div>正在读取文件...</div>
+  </div>
+
+  <div class="error" id="error"></div>
+
+  <div class="result" id="result">
+    <pre id="resultPre"></pre>
+  </div>
+</div>
+
+<script>
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const loading = document.getElementById('loading');
+const error = document.getElementById('error');
+const result = document.getElementById('result');
+const resultPre = document.getElementById('resultPre');
+
+// 点击触发选择
+dropZone.addEventListener('click', () => fileInput.click());
+
+// 拖拽
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  const f = e.dataTransfer.files[0];
+  if (f && f.name.endsWith('.csv')) upload(f);
+  else showError('请上传 .csv 文件');
+});
+
+fileInput.addEventListener('change', () => {
+  if (fileInput.files[0]) upload(fileInput.files[0]);
+});
+
+async function upload(file) {
+  toggleUI(true);
+  const form = new FormData();
+  form.append('file', file);
+  try {
+    const res = await fetch('/preview', { method: 'POST', body: form });
+    const data = await res.json();
+    if (data.success) {
+      resultPre.textContent = data.preview;
+      result.style.display = 'block';
+      error.textContent = '';
+    } else {
+      showError(data.error);
+    }
+  } catch (e) {
+    showError('网络错误：' + e.message);
+  } finally {
+    toggleUI(false);
+  }
+}
+
+function toggleUI(isLoading) {
+  loading.style.display = isLoading ? 'block' : 'none';
+  dropZone.style.display = isLoading ? 'none' : 'block';
+  if (isLoading) result.style.display = 'none';
+}
+function showError(msg) {
+  error.textContent = msg;
+  result.style.display = 'none';
+}
+</script>
+</body>
+</html>

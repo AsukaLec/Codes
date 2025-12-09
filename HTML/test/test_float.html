@@ -1,0 +1,93 @@
+<!-- <!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Hover 漂浮效果</title>
+<style>
+/* 基础卡片 */
+.card{
+    width: 200px;
+    padding: 40px 20px;
+    margin: 80px auto;
+    text-align: center;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+    /* 关键 1：给初始状态一个“钉子” */
+    transform: translateY(0);
+    transition: all .25s ease-out;
+}
+
+/* 关键 2：悬停时往上飘 6px，同时加大阴影制造“离地”错觉 */
+.card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0,0,0,.20);
+}
+</style>
+
+</head>
+<body>
+    <div class="card">鼠标放上来，我飘了~</div>
+</body>
+<body>
+    <div class="card">鼠标放上来，我飘了~</div>
+</body>
+<body>
+    <div class="card">鼠标放上来，我飘了~</div>
+</body>
+</html> -->
+
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>两行两列漂浮卡片</title>
+<style>
+/* -------------- 基础漂浮卡片（你原来的） -------------- */
+.card{
+    width: 200px;
+    padding: 40px 20px;
+    text-align: center;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+    transform: translateY(0);
+    transition: all .25s ease-out;
+}
+.card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0,0,0,.20);
+}
+
+/* -------------- 布局：两行两列 -------------- */
+.wrapper{
+    display: flex;          /* 上下两行 */
+    flex-direction: column;
+    gap: 40px;              /* 两行间距 */
+    align-items: center;    /* 水平居中 */
+    padding: 60px 0;
+}
+.row{
+    display: flex;          /* 每行左右两列 */
+    gap: 40px;              /* 两列间距 */
+}
+</style>
+</head>
+
+<body>
+<div class="wrapper">
+    <!-- 第一行 -->
+    <div class="row">
+        <div class="card">卡片 1</div>
+        <div class="card">卡片 2</div>
+    </div>
+
+    <!-- 第二行 -->
+    <div class="row">
+        <div class="card">卡片 3</div>
+        <div class="card">卡片 4</div>
+    </div>
+</div>
+</body>
+</html>

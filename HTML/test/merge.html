@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>卡片漂浮 + 底部出线 合并效果</title>
+<style>
+/* ========= 页面排版 ========= */
+body{
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: #f4f6fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    gap: 60px;
+    flex-wrap: wrap;
+}
+h3{
+    margin-top: 0;
+    font-size: 18px;
+    color: #666;
+}
+/* ========= 合并后的卡片 ========= */
+.card{
+    width: 200px;
+    padding: 40px 20px;
+    text-align: center;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+    cursor: pointer;
+    position: relative;          /* 给伪元素用 */
+    transform: translateY(0);
+    transition: all .35s ease-out;
+}
+
+/* ---- 漂浮 + 阴影 ---- */
+.card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0,0,0,.20);
+}
+
+/* ---- 底部线条（伪元素伸长版） ---- */
+.card::after{
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 3px;
+    background: #1890ff;
+    transition: all .35s;
+}
+.card:hover::after{
+    left: 0;
+    width: 100%;
+}
+</style>
+</head>
+<body>
+    <div class="card">卡片 1
+        <h3 class = "card"> 111 </h3>
+    </div>
+    <div class="card">卡片 2</div>
+    <div class="card">卡片 3</div>
+</body>
+</html>
