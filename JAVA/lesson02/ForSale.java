@@ -6,6 +6,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
 
+/**
+ * 在lesson02中设计一个类ForSale.java，实现以下功能
+ * 1）程序运行时提示用户输入代表 产品的生产日期的字符串格式为 ：yyyy-mm-dd : 如:2008-08-08
+ * 2）用户回车确认输入后，提示用户输入产品的保质期以天为单位。如: 180
+ * 3）计算输出离产品过期日期最近的前一个星期六的日期（促销处理日），在控制台输出；
+ */
 public class ForSale {
 
     public static void main(String[] args) throws ParseException {

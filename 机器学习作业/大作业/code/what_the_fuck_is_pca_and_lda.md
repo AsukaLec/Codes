@@ -1,0 +1,176 @@
+PCA 与 LDA 都是「降维」工具，但目标完全不同：  
+- PCA 是无监督的——只想把数据「压扁」到最大方差方向，不利用标签。  
+- LDA 是有监督的——专门找能把类别分开的方向，让同类聚、异类散。
+
+---
+
+一、PCA（Principal Component Analysis）
+
+1. 思想
+
+   把原始特征线性组合成少数几个「主成分」，使投影后样本的方差最大（信息保留最多）。
+
+2. 步骤
+
+   ① 数据中心化（减均值）
+
+   ② 算协方差矩阵 Σ
+
+   ③ 对 Σ 做特征分解，取前 k 大特征值对应的特征向量 → 投影矩阵 W
+
+   ④ X' = X·W 即降维后数据
+
+3. 特性  
+   - 无监督：不需要标签 y  
+   - 正交主成分，方向按解释方差排序  
+   - 对尺度敏感 → 需标准化  
+   - 线性方法；非线性结构用 kernel-PCA 或 Autoencoder
+
+4. 用途
+
+   可视化、去噪、压缩、预处理提速
+
+---
+
+二、LDA（Linear Discriminant Analysis）
+
+1. 思想
+
+   利用类别信息，找投影方向使「类间散度」最大、「类内散度」最小；即同类近、异类远。
+
+2. 步骤（二分类为例）
+
+   ① 计算类均值 μ₁, μ₂ 与总均值 μ
+
+   ② 类间散度 Sb = (μ₁-μ)(μ₁-μ)ᵀ + (μ₂-μ)(μ₂-μ)ᵀ
+
+   ③ 类内散度 Sw = Σ₁+Σ₂（两类协方差之和）
+
+   ④ 解广义特征问题  Sb·w = λ·Sw·w
+
+   ⑤ 取最大特征值对应特征向量 w → 投影方向
+
+   多类时 Sb/Sw 定义扩展，最多可降到 C-1 维（C=类别数）
+
+3. 特性  
+   - 有监督：必须用标签  
+   - 成分不保证正交，但按判别力排序  
+   - 对异常值、共线性敏感  
+   - 假设各类协方差矩阵相似（若差异大，性能下降）
+
+4. 用途
+
+   降维+分类一体、特征提取、人脸识别（Fisherfaces）、基因表达分析
+
+---
+
+三、直观对比
+
+	PCA	LDA	
+目标	最大方差（信息保留）	最大类间/最小类内	
+标签	不需要	必需	
+最大维度	原始维数	C-1（C=类别数）	
+成分正交	是	否	
+尺度敏感	是	是	
+主要用途	压缩、去噪、可视化	判别特征、分类前置	
+
+---
+
+四、何时选谁
+
+- 只想看看数据长什么样、无标签 → PCA  
+- 标签存在，且后续要分类 → LDA 更优（可再接分类器）  
+- 类别很多、样本很少 → LDA 可能过拟合，先 PCA 降维再 LDA 亦可
+
+一句话：
+
+PCA 保信息，LDA 保判别。
+
+---
+1. 结果怎么用
+
+2. 图
+
+   `pca_lda_2d.png` 一眼看两类是否被拉开：LDA 通常比 PCA 分离得更明显。
+
+3. 解释方差 / 特征值  
+   - PCA：告诉你前 2 维保留了多少原始信息（>70% 就算不错）。  
+   - LDA：告诉你这两维对区分类别的“判别力”大小（越接近 1 越好）。
+
+4. 载荷表
+
+   `pca_loading.csv` / `lda_loading.csv` 给出每个原始特征对新轴的贡献：  
+   - 绝对值大 → 该特征在降维方向里权重高，可优先保留或深入分析。  
+   - 符号 → 正向/负向影响。
+
+5. 后续路线  
+   - 直接把 `X_pca` 或 `X_lda` 喂给逻辑回归、SVM、随机森林等，看能否在更低维度上取得与原空间相近的 AUC，验证降维有效性。  
+   - 若 LDA 效果突出，可保留 1 维（C-1）作为最强判别特征，再与其他模型集成。
+
+一句话：PCA 帮你压缩+可视化，LDA 帮你找“最能把有病没病分开”的方向；先降维再建模，常能提速、降噪、甚至提点。
+
+---
+
+把载荷当「方向余弦」看即可：
+
+1. 正负号  
+   - 正值 → 该特征与主成分同向增减  
+   - 负值 → 反向增减  
+
+2. 绝对值大小  
+   - 越大 → 对 PC1/PC2 贡献越大；越小 → 几乎没贡献  
+   - 典型阈值：|loading|>0.3 算“有感觉”，>0.4 算“核心驱动”
+
+3. 结合两轴一起看
+
+   PC1 高载荷：weight、ap_hi、ap_lo → 「体型+血压」综合体
+
+   PC2 高载荷：gender、height → 「性别+身高」综合体
+
+   active 两轴都≈0 → 对整体方差几乎无影响，可优先考虑丢弃或单独处理
+
+4. 与解释方差联动
+
+   前两轴只解释 36.3%，说明还有大量信息散落在更高维；若后续建模效果一般，可再抬升 n_components 或换非线性降维。
+
+一句话：
+
+loading 绝对值大的特征就是“主成分代表什么”的答案；用它做特征筛选、业务解释、后续聚类/可视化都行。
+
+---
+
+可以，而且这是 PCA 的典型用法：
+
+1. 把 PC1、PC2 当成「新特征」直接喂给下游模型（逻辑回归、XGBoost、SVM …）  
+2. 它们已经去相关、尺度一致，通常能提速、降噪，有时还能提点  
+3. 若解释方差够用（这里 36 % 稍低，可再试 3-5 维），就能用更少变量保留大部分信息
+
+一句话：PC1、PC2 就是两条全新的数值特征，可像 age、weight 一样塞进 DataFrame 继续用。
+
+
+**你最终保留并用于后续建模的 11 个人工特征 及其简称、全称与计算公式如下（按你在脚本中出现的顺序）：**
+
+简称	全称（含义）	计算公式（基于原始列）	
+BMI	Body Mass Index	`weight / (height / 100) ** 2`	
+PP	Pulse Pressure	`ap_hi - ap_lo`	
+MAR	Mean Arterial Pressure	`(ap_hi + 2 * ap_lo) / 3`	
+WPC	Weight Per Centimeter	`weight / height`	
+GPB	Glucose per BMI	`gluc * BMI`	
+ABP	Age Blood Pressure Score	`age * (ap_hi / 100)`	
+RISK	Lifestyle Risk Count	`smoke + alco + (cholesterol > 1) + (gluc > 1)`	
+AG	Age Glucose Interaction	`age * gluc`	
+CBMI	Cholesterol per BMI	`cholesterol * BMI`	
+PPA	Pulse Pressure per Age	`PP * age`	
+
+```
+# BMI	`weight / (height/100)**2`	体型-代谢风险单指标
+# PP (PulsePressure)	`ap_hi - ap_lo`	动脉硬化指标，≥60 高风险
+# MAR (MeanArterialPressure)  `(ap_hi + 2*ap_lo)/3`	平均灌注压，比单收/舒更稳
+# WPC (WeightPerCm)	`weight / height`	单位身高负载，矮胖者风险
+# GPB (GlucPerBMI)	`gluc * BMI`	肥胖+高糖交互
+# ABP(AgeBPScore)	`age * (ap_hi/100)`    年龄与收缩压协同，老年高压惩罚       
+# RISK(RiskSum)	`smoke + alco + (cholesterol>1) + (gluc>1)`	可改不良生活计数，0-4 量化行为风险
+# AG (AgeGluc)	`age * gluc`	年龄×血糖交互，老年糖耐量恶化指标
+# CBMI(CholBMI)	`cholesterol * BMI`	高胆固醇+肥胖 → 动脉硬化加速
+# PPA (PulsePressureAge) `PP * age`   脉压与年龄交互，老年动脉硬化信号
+```

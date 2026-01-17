@@ -7,7 +7,13 @@ import java.util.Date;
 import java.util.Scanner;
 
 /**
- * 功能：身份证号合法性校验 + 年龄 + 出生年第几周 + 已存活周数
+ * 在lesson02中设计一个名字为IdCardCheck.java类，
+ * 实现从键盘 输入一个身份证号码字符串，
+ * 判断输入的字符串是否符合身份证号码胡规则，
+ * 如果符合，计算输出年龄 输出它的年龄，
+ * 输出你 出生在那一年的第几周以及出生到现在已经经过了几周了。
+ * 如果不符合，提示，并让其重新输入。
+ * 直到输入正确省份证号码为止。
  */
 public class idCardCheck {
 
@@ -52,7 +58,7 @@ public class idCardCheck {
                 birthCal.add(Calendar.DAY_OF_YEAR, 1);
             }
 
-            System.out.println(birthCal.get(Calendar.YEAR));
+            //System.out.println(birthCal.get(Calendar.YEAR));
 
             System.out.println("年龄：" + age);
             System.out.println("出生在那一年第 " + weekOfYear + " 周");

@@ -1,5 +1,10 @@
 package lesson01;
 import java.util.Scanner;
+
+/** 
+ * 编写java程序，从键盘输入一个整数x，判断是技术还是偶数，
+ * 输出判断结果。使出格式为： X为（奇/偶）数
+ */
 public class basic1 {
     public static void main(String[] var0) {
         @SuppressWarnings("resource")

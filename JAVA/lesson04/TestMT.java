@@ -20,6 +20,10 @@ public class TestMT {
 		   System.out.println(b.show(b));  //      B B 
 		   System.out.println(b.show(c));  //      B B
 		   System.out.println(b.show(d));  //      B B ** A D
+
+		   System.out.println();
+		   System.out.println();
+		   System.out.println(a2.show((B)d));
 	}
 
 }

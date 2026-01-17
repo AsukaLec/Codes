@@ -116,15 +116,8 @@ public class assignment1 {
         sc.close();
     }
 
-    
     @FunctionalInterface
     public interface Sortable {
         int[] sort(int arr[]);
     }
-
 }
-
-
-
-
-

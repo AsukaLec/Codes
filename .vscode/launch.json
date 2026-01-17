@@ -3,6 +3,153 @@
     "configurations": [
         {
             "type": "java",
+            "name": "assignment1",
+            "request": "launch",
+            "mainClass": "lesson07.assignment1",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "TestMT",
+            "request": "launch",
+            "mainClass": "lesson04.TestMT",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "test",
+            "request": "launch",
+            "mainClass": "something_fun.test",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "improve2",
+            "request": "launch",
+            "mainClass": "lesson01.improve2",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "challenge",
+            "request": "launch",
+            "mainClass": "lesson01.challenge",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "test",
+            "request": "launch",
+            "mainClass": "lesson11.test",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "UDPClient",
+            "request": "launch",
+            "mainClass": "lesson11.UDPClient",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "UDPServer",
+            "request": "launch",
+            "mainClass": "lesson11.UDPServer",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "TCPClient",
+            "request": "launch",
+            "mainClass": "lesson11.TCPClient",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "TCPServer",
+            "request": "launch",
+            "mainClass": "lesson11.TCPServer",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "idCardCheck",
+            "request": "launch",
+            "mainClass": "lesson02.idCardCheck",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "CountAndSumNum",
+            "request": "launch",
+            "mainClass": "lesson03.CountAndSumNum",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "improve3",
+            "request": "launch",
+            "mainClass": "lesson01.improve3",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "ClothStorePro",
+            "request": "launch",
+            "mainClass": "lesson09.ClothStorePro",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "ClothStore",
+            "request": "launch",
+            "mainClass": "lesson09.ClothStore",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "ThreadTest",
+            "request": "launch",
+            "mainClass": "lesson09.ThreadTest",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "FilesCopy",
+            "request": "launch",
+            "mainClass": "lesson08.FilesCopy",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "Test061",
+            "request": "launch",
+            "mainClass": "lesson08.Test061",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "Test06",
+            "request": "launch",
+            "mainClass": "lesson08.Test06",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "Test05",
+            "request": "launch",
+            "mainClass": "lesson08.作业文件.Test05",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
+            "name": "assignment1",
+            "request": "launch",
+            "mainClass": "lesson08.assignment1",
+            "projectName": "Codes_4ff26a0c"
+        },
+        {
+            "type": "java",
             "name": "Test06",
             "request": "launch",
             "mainClass": "lesson08.Test06",

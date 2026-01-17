@@ -1,10 +1,16 @@
 package lesson01;
 import java.util.Scanner;
 
+/**
+ * 编写java程序，从键盘输入一个整数n，
+ * 分别使用for循环和while循环语句计算 1+1/2!+1/3!+......+1/n!;
+ */
+
 public class basic2 {
     public static void main(String[] args) {
         @SuppressWarnings("resource")
         Scanner scanner = new Scanner(System.in);
+        
         int n = scanner.nextInt();
 
         double ans1 = 0.0;

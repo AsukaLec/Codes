@@ -1458,8 +1458,484 @@
 // }
 
 
+// #include <bits/stdc++.h>
+// using namespace std;
+
+// template < typename M, typename I, typename R, typename U>
+// void increaseEnumerate(int s, int e,
+//                       const M& match,
+//                       const I& insert,
+//                       const R& remove,
+//                       const U& update) {
+// for (int l = s, r = s; l <= e; ) {
+//     while(l == r || r <= e && !match(l, r - 1)) insert (l, r ++);
+//     if (match(l, r - 1)) update(l, r - 2);
+//     else update(l, r - 1);
+//     remove(l ++, r);
+//     }
+// }
+
+// int main() {
+//     int T;
+//     cin >> T;
+//     while (T--) {
+//         int n;
+//         cin >> n;
+//         string str;
+//         cin >> str;
+//         auto func = [&](int v1, int v2) {
+//             vector<int> v(128);
+//             v['<'] = v1;
+//             v['>'] = v2;
+//             int sum = 0;
+//             long long total = 0;
+//             increaseEnumerate(0, n - 1,
+//                 [&](int l, int r) { return sum < 0; },
+//                 [&](int l, int r) { sum += v[str[r]]; },
+//                 [&](int l, int r) { sum -= v[str[l]]; },
+//                 [&](int l, int r) { total += r - l + 1; });
+//             return total;
+//         };
+//         cout << func(0, -1) + func(-1, 0) - func(-1, -1) * 2 << endl;
+//     }
+//     return 0;
+// }
+
+
 #include <bits/stdc++.h>
 using namespace std;
+
+// int main() {
+//     deque<int> dq;
+//     dq.push_back(1);
+//     dq.push_back(2);    
+//     cout << dq.front() << ' ' << dq.back() << endl;
+//     dq.pop_front();
+//     cout << dq.front() << ' ' << dq.back() << endl;
+// }
+
+
+
+// int main() {
+//     int n;
+//     cin >> n;
+//     vector<int > arr(n);
+//     for(auto &x: arr) cin >> x;
+//     stack<int> st;
+//     vector<int> next_g(n);
+
+//     for(int i = n - 1; i >= 0; i --){
+//         while(!st.empty() && arr[st.top()] <= arr[i]) st.pop();
+//         if (st.empty()) next_g[i] = -1;
+//         else next_g[i] = st.top();
+//         st.push(i);
+//     }
+
+//     for(int i = 0; i < n;i ++){
+//         cout << next_g[i] + 1 << ' ';
+//     }
+// }
+
+
+//int main() {
+//     int n, k;
+//     cin >> n >> k;
+//     vector<int > arr(n);
+//     for(auto &x: arr) cin >> x;
+
+//     vector<int> res_g(n);
+//     vector<int> res_s(n);
+
+//     // for(int i = 0; i < n; i++){
+//     //     while(!next_g.empty() && arr[next_g.back()] <= arr[i]) next_g.pop_back();
+//     //     while(!next_s.empty() && arr[next_s.back()] >= arr[i]) next_s.pop_back();
+        
+//     //     while(!next_s.empty() && next_s.front() <= i - k) next_s.pop_front();
+//     //     while(!next_g.empty() && next_g.front() <= i - k) next_g.pop_front();
+
+//     //     next_g.push_back(i);
+//     //     next_s.push_back(i);
+
+//     //     res_g[i] = arr[next_g.front()];
+//     //     res_s[i] = arr[next_s.front()];
+//     // }
+
+//     mono_deque<int, greater> next_g;
+//     mono_deque<int, less> next_s;
+
+//     for(int i = 0; i < n; i ++) {
+//         res_g[i] = next_g.push(i, arr[i]).shrink_to(i - k).get_extremum();
+//         res_s[i] = next_s.push(i, arr[i]).shrink_to(i - k).get_extremum();
+//     }
+
+//     for (int i = 2; i < n; i ++) {
+//         cout << res_s[i] << ' ';
+//     }
+//     cout << "\n";
+//     for(int i = 2; i < n; i ++) {
+//         cout << res_g[i] << ' ';
+//     }
+// }
+
+// int main() {
+//     int n;
+//     cin >> n;
+//     vector<int> H(n);
+//     vector<int> power(n);
+//     for(int i = 0; i < n; i++) cin >> H[i] >> power[i];
+
+//     auto left_idx = get_next_prev<greater>(H, true);
+//     auto right_idx = get_next_prev<greater>(H, false);
+
+    
+//     int max = -1;
+//     vector<int> ans(n, 0);
+//     for (int i = 0; i < n; i++) {
+//         if(left_idx[i] >= 0) ans[left_idx[i]] += power[i];
+//         if(right_idx[i] < n) ans[right_idx[i]] += power[i];
+//     }
+
+//     for (auto &x : ans) if(x > max) max = x;
+
+//     cout << max << endl;
+// }
+
+
+// int main() {
+//     int n, k;
+//     cin >> n >> k;
+//     vector<int> arr(n);
+//     for(auto &x: arr) cin >> x;
+
+//     int k_n  = n - k + 1;
+
+//     mono_deque<int, greater> max_dq;
+//     mono_deque<int, less> min_dq;
+
+//     vector<int> res_max(n);
+//     vector<int> res_min(n);
+
+//     for (int i = 0; i < n; i ++) {
+//         res_max[i] = max_dq.push(i, arr[i]).shrink_to(i - k).get_extremum();
+//         res_min[i] = min_dq.push(i, arr[i]).shrink_to(i - k).get_extremum();
+//     }
+
+//     double max_total = 0.0;
+//     double min_total = 0.0;
+//     for (int i = k - 1; i < n; i ++) {
+//         max_total += res_max[i];
+//         min_total += res_min[i];
+//     }
+
+//     double ans = (max_total - min_total) / (k_n);
+
+//     cout << fixed << setprecision(2) << ans << endl;
+
+// }
+
+
+// template < typename T>
+// vector<int> find_left (vector<T> &arr) {
+//     int n = arr.size();
+//     vector<int> res(n);
+
+//     for (int i = 0; i < n; i ++) {
+//         int left_pos = i;
+//         for (int k = i - 1; k >= 0; k --) {
+//             if (arr[k] >= arr[i]) left_pos-- ;
+//             else break;
+//         }
+//         res[i] = left_pos;
+//     }
+//     return res;
+// }
+
+// template < typename T>
+// vector<int> find_right (vector<T> &arr) {
+//     int n = arr.size();
+//     vector<int> res(n);
+
+
+//     for(int i = n - 1; i >= 0; i --) {
+//         int right_pos = i;
+//         for (int k = i + 1; k < n; k ++) {
+//             if (arr[k] >= arr[i]) right_pos++ ;
+//             else break;
+//         }
+//         res[i] = right_pos;
+//     }
+//     return res;
+// }
+
+
+// int main() {
+
+
+//     while(true) {
+//         int n;
+//         cin >> n;
+//         vector<int> arr(n);
+//         for(auto &x: arr) cin >> x;
+
+//         auto left_pos = get_next_prev<less>(arr,true);
+//         auto right_pos = get_next_prev<less>(arr,false);
+
+//         for (auto &x : left_pos) cout << x << ' ';
+//         cout << endl;
+//         for (auto &x : right_pos) cout << x << ' ';
+//         cout << endl;
+
+//         long long max = LONG_LONG_MIN;
+//         for (int i = 0; i < n; i ++) {
+//             max = arr[i] * (right_pos[i] - left_pos[i] + 1) >  max ? arr[i] * (right_pos[i] - left_pos[i] + 1) : max;
+//         }
+        
+//         cout << max << endl;
+//     }
+// }
+
+
+
+// template <typename T> typename Cmp = greater<T>, typename T>
+// vector<int> get_next_prev(vector<T> &arr, bool prev = false) {
+//     int n = arr.size();
+//     vector<int> res(n);
+//     stack<int> st;
+//     for (int i = prev ? 0 : n - 1; prev ? i < n : i >= 0; prev ? ++i : --i) {
+//         while (!st.empty() && !Cmp<T>()(arr[st.top()], arr[i])) st.pop();
+//         res[i] = st.empty() ? (prev ? -1 : n) : st.top();
+//         st.push(i);
+//     }
+//     return res;
+// }
+
+// template <template<typename> typename Cmp = greater, typename T>
+// //false 用于找后一个，true用于找前一个
+// vector<int> get_next_prev(vector<T> &arr, bool prev = false) {
+//     int n = arr.size();
+//     vector<int> res(n);
+//     stack<int> st;
+//     for (int i = prev ? 0 : n - 1; prev ? i <= n : i >= 0; prev ? ++i : --i) {
+//         while (!st.empty() && !Cmp<T>()(arr[st.top()], arr[i])) st.pop();
+//         res[i] = st.empty() ? (prev ? -1 : n) : st.top();
+//         st.push(i);
+//     }
+//     return res;
+// }
+
+
+// int main() {
+//     // for L : [1, n]
+//     //     for R : [L, n]
+//     //         min(A[L:R]) * (R - L + 1)
+//     int n;
+//     cin >> n;
+//     vector<int> a(n);
+//     for (auto &x : a) cin >> x;
+//     auto prev_l = get_next_prev<less>(a, true);
+//     auto next_l = get_next_prev<less>(a);
+//     long long ans = 0;
+//     for (int i = 0; i < n; i++) {
+//         ans = max(ans, (next_l[i] - prev_l[i] - 1LL) * a[i]);
+//     }
+//     cout << ans << endl;
+// }
+
+
+
+// int main() {
+
+    
+//     int n;
+//     cin >> n;
+//     vector<int> a(n);
+//     for (auto &x : a) cin >> x;
+//     auto prev_l = get_next_prev<less>(a, true);
+//     auto next_l = get_next_prev<less>(a);
+//     long long ans = 0;
+//     for (int i = 0; i < n; i++) {
+//         ans = max(ans, (next_l[i] - prev_l[i] - 1LL) * a[i]);
+//     }
+//     cout << ans << endl;
+// }
+
+
+
+// int main() {
+//     int n, m;
+//     vector<vector<int>> maze;
+//     cin >> n >> m;
+//     maze.resize(n, vector<int>(m));
+//     for (auto &row : maze) {
+//         for (auto &x : row) cin >> x;
+//     }
+
+//     auto height = vector(n, vector<int>(m));
+
+//     //前缀和 
+//     //有个很关键的点，每一个纵列最底下的元素的值不能为0，否则高度无法计算
+//     //这里前缀和的计算很巧妙地解决了这个问题
+//     for (int i = 0; i < n; i ++) {
+//         for (int j =0; j < m; j ++) {
+//             if (maze[i][j] == 0) continue;
+//             height[i][j] = 1;
+//             if(i) height[i][j] += height[i - 1][j];
+//         }
+//     }
+
+//     // cout << endl;
+//     // for (auto &row :height){
+//     //     for (auto &x : row) cout << x << ' ';
+//     //     cout << endl;
+//     // }
+
+//     int ans = 0;
+//     for (int x = 0; x < n; x ++) {
+//         auto left_idx = get_next_prev<less>(height[x], true);
+//         auto right_idx = get_next_prev<less>(height[x]);
+
+//         for (int i = 0; i< m; i++) {
+//             ans = max(ans, (right_idx[i] - left_idx[i] - 1) * height[x][i]);
+//         }
+//     }
+
+//     cout << ans << endl;
+// }
+
+
+// int main(){
+//     int n, m , a ,b;
+//     cin >> n >> m >> a >> b;
+//     auto maze = vector(n, vector<int>(m));
+//     auto max_maze = vector(n, vector<int>(m));
+//     auto min_maze = vector(n, vector<int>(m));
+
+//     for (auto &row : maze) for (auto &x : row) cin >> x;
+
+//     for (int i = 0; i < n; i ++) {
+//         mono_deque<int, greater> max_dq;
+//         mono_deque<int, less> min_dq;
+//         for (int j = 0; j < m; j ++) {
+//             max_maze[i][j] = max_dq.push(j, maze[i][j]).shrink_to(j - b).get_extremum();
+//             min_maze[i][j] = min_dq.push(j, maze[i][j]).shrink_to(j - b).get_extremum();
+//         }    
+//     }
+
+//     for( int j = 0; j < m; j ++) {
+//         mono_deque<int, greater> max_dq;
+//         mono_deque<int, less> min_dq;
+//         for (int i = 0; i < n; i ++) {
+//             max_maze[i][j] =  max_dq.push(i, max_maze[i][j]).shrink_to(i - a).get_extremum();
+//             min_maze[i][j] =  min_dq.push(i, min_maze[i][j]).shrink_to(i - a).get_extremum();
+//         }
+//     }
+
+//     long long ans = 0;
+//     for (int i = a - 1; i < n; i ++) {
+//         for (int j = b - 1; j < m; j ++) {
+//             ans += max_maze[i][j] * min_maze[i][j];
+//             ans %= 998244353;
+//         }
+//     }
+
+//     cout << ans << endl;
+// }
+
+
+
+// template <typename T, template <typename> typename Cmp = greater>
+// class mono_deque : public deque<pair<int, T>>{ // Monotonic 单调
+//     public:
+//     //将元素保存到末尾并自动保持单调性
+//     mono_deque & push(int idx, const T &x) {
+//         while (!this->empty() && !Cmp<T>()(this->back().second, x)) this->pop_back();
+//         this->push_back({idx, x});
+//         return *this;
+//     }
+//     //将队列中坐标小于等于 idx 的元素删除
+//     mono_deque & shrink_to(int idx = -1) {
+//         while (!this->empty() && this->front().first <= idx) this->pop_front();
+//         return *this;
+//     }
+//     //获取当前队列中的极值
+//     T get_extremum() {return this->front().second;}
+// };
+
+// template <template <typename> typename Cmp = greater, typename T>
+// vector<int> get_next_prev(vector<T> &arr, bool prev = false) {
+//     int n = arr.size();
+//     vector<int> res(n);
+//     stack<int> st;
+//     for (int i = prev ? 0 : n - 1; prev ? i < n : i >= 0; prev ? ++i : --i) {
+//         while (!st.empty() && !Cmp<T>()(arr[st.top()], arr[i])) st.pop();
+//         res[i] = st.empty() ? (prev ? -1 : n) : st.top();
+//         st.push(i);
+//     }
+//     return res;
+// }
+
+// int main() {
+//     ios::sync_with_stdio(false);
+//     cin.tie(NULL);
+
+//     int n;
+//     cin >> n;
+//     vector<int> a(n);
+//     for (auto &x : a) cin >> x;
+//     auto next_l = get_next_prev<less>(a);
+//     auto prev_g = get_next_prev<greater>(a, true);
+
+//     for (int i = 0; i < n; i ++) {
+//         cout << i << "," << --next_l[i] << "; ";
+//     }
+//     cout << endl;
+//     for (int i = 0; i < n; i ++) {
+//         cout << ++prev_g[i]  << "," << i << "; ";
+//     }
+//     cout << endl;
+    
+//     // for (int i= 0; i < n; i++) {next_l[i]--; prev_g[i]++;}
+
+//     int ans = 0;
+
+//     for(int left_idx = 0, right_idx = next_l[left_idx]; left_idx < n;) {
+
+//         for (; right_idx >= left_idx; right_idx --) {
+//             if (prev_g[right_idx] <= left_idx) {
+//                 ans += 1;
+//                 left_idx = ++ right_idx;
+//                 right_idx = next_l[left_idx];
+//                 break;
+//             }
+//         }
+//     }
+
+//     cout << ans;
+
+// }
+
+// int main() {
+//     ios::sync_with_stdio(false);
+//     cin.tie(NULL);
+
+//     int n;
+//     cin >> n;
+//     vector<int> a(n);
+//     for (auto &x : a) cin >> x;
+//     auto next_l = get_next_prev<less>(a);
+//     auto next_g = get_next_prev<greater_equal>(a);
+
+//     int ans = 0;
+//     for (int left_idx = 0, right_idx = 0; left_idx < n; ) {
+//         for(; next_g[right_idx] < next_l[left_idx]; right_idx = next_g[right_idx]);
+//         left_idx = right_idx = right_idx  + 1;
+//         ans ++;
+//     }
+
+//     cout << ans;
+
+// }
+
 
 template < typename M, typename I, typename R, typename U>
 void increaseEnumerate(int s, int e,
@@ -1470,33 +1946,54 @@ void increaseEnumerate(int s, int e,
 for (int l = s, r = s; l <= e; ) {
     while(l == r || r <= e && !match(l, r - 1)) insert (l, r ++);
     if (match(l, r - 1)) update(l, r - 2);
-    else update(l, r - 1);
+    else update(l, r - 1); //右指针越界了也找不到匹配的区间，那自然就是剩下的所有区间了。
     remove(l ++, r);
     }
 }
+//本函数在跳出while后， [l, r - 1] 才是符合条件的最小区间（因为while内r已自增）[l, r - 2]就是不符合条件的最大区间， 所以update的是[l, r - 2]。
 
-int main() {
-    int T;
-    cin >> T;
-    while (T--) {
-        int n;
-        cin >> n;
-        string str;
-        cin >> str;
-        auto func = [&](int v1, int v2) {
-            vector<int> v(128);
-            v['<'] = v1;
-            v['>'] = v2;
-            int sum = 0;
-            long long total = 0;
-            increaseEnumerate(0, n - 1,
-                [&](int l, int r) { return sum < 0; },
-                [&](int l, int r) { sum += v[str[r]]; },
-                [&](int l, int r) { sum -= v[str[l]]; },
-                [&](int l, int r) { total += r - l + 1; });
-            return total;
-        };
-        cout << func(0, -1) + func(-1, 0) - func(-1, -1) * 2 << endl;
+
+template <typename T, template <typename> typename Cmp = greater>
+class mono_deque : public deque<pair<int, T>>{ // Monotonic 单调
+    public:
+    //将元素保存到末尾并自动保持单调性
+    mono_deque & push(int idx, const T &x) {
+        while (!this->empty() && !Cmp<T>()(this->back().second, x)) this->pop_back();
+        this->push_back({idx, x});
+        return *this;
     }
-    return 0;
+    //将队列中坐标小于等于 idx 的元素删除
+    mono_deque & shrink_to(int idx = -1) {
+        while (!this->empty() && this->front().first <= idx) this->pop_front();
+        return *this;
+    }
+    //获取当前队列中的极值
+    T get_extremum() {return this->front().second;}
+};
+int main() {
+    int n, d;
+    cin >> n >> d;
+    vector<pair<int, int>> a(n);
+    for (auto &[x, y] : a) cin >> x >> y;
+
+    sort(a.begin(),a.end());
+
+    mono_deque<int, greater> dec_q;
+    mono_deque<int, less> inc_q;
+    int ans = INT_MAX;
+    increaseEnumerate(0, n - 1,
+        [&](int l, int r) {
+            return l <= r && dec_q.get_extremum()- inc_q.get_extremum() >= d; 
+        },
+        [&](int l, int r) {
+            inc_q.push(r, a[r].second);
+            dec_q.push(r, a[r].second);
+        },
+        [&](int l, int r) {inc_q.shrink_to(l); dec_q.shrink_to(l);},
+        [&](int l, int r) {
+            if (r + 1 == n) return;
+            ans = min(ans, a [r + 1].first - a[l].first);
+        });
+    cout << (ans == INT_MAX ? -1 : ans) << endl;
 }
+

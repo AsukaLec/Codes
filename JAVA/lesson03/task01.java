@@ -2,6 +2,13 @@ package lesson03;
 import java.util.Random;
 import java.util.Arrays;
 
+/**定义一个 长度为10的整型数组，元素的值大小为随机数，
+ *  然后完成以下操作：
+ * a. 在同一行中输出数组的 所有元素，
+ * b. 删除数组中值最大和最小的元素，数组顺序不变
+ * c.  在数组的前面，中间和后面各插入一个新的元素
+ * d. 给排好序的数组插入一个元素，要求插入元素后，数组也是有序的。
+*/
 public class task01 {
     public static void main(String[] args) {
         int[] array0 = new int[10];
