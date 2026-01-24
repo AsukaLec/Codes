@@ -1144,21 +1144,19 @@ $100\%$ 的数据：$1 \le N \le 10 ^ 5$，$1 \le D \le 10 ^ 6$，$0\le x,y\le10
 
 ### 题解
 
+这个吧，其实可以用单调性枚举的思想来做
+输入的时候二维数组是无序的，我们先排个序，然后从第一列向右边开始遍历
+
+每一次新加入一列，题目中要求的最小区间的长度只可能变长而不会变短
+每一次删除左边的一列，题目中要求的最小区间的长度只可能变短而不会变长
+综上 符合单调性的要求
+所以可以直接套单调性枚举的模板
+重点其实还是要看一下是怎么维护这个区间的，在第四章的时候我们用的是multiset来维护区间的最大值和最小值
+在这里我们可以用单调双端队列来维护区间的最大值和最小值
+代码如下，我的评价是有时间再看看第四章。
+自己想的时候可以想到要维护最大值和最小值的区间，可惜不会写，麻了。
+
 ```cpp
-template < typename M, typename I, typename R, typename U>
-void increaseEnumerate(int s, int e,
-                      const M& match,
-                      const I& insert,
-                      const R& remove,
-                      const U& update) {
-for (int l = s, r = s; l <= e; ) {
-    while(l == r || r <= e && !match(l, r - 1)) insert (l, r ++);
-    if (match(l, r - 1)) update(l, r - 2);
-    else update(l, r - 1); //右指针越界了也找不到匹配的区间，那自然就是剩下的所有区间了。
-    remove(l ++, r);
-    }
-}
-//本函数在跳出while后， [l, r - 1] 才是符合条件的最小区间（因为while内r已自增）[l, r - 2]就是不符合条件的最大区间， 所以update的是[l, r - 2]。
 
 
 template <typename T, template <typename> typename Cmp = greater>
@@ -1178,6 +1176,22 @@ class mono_deque : public deque<pair<int, T>>{ // Monotonic 单调
     //获取当前队列中的极值
     T get_extremum() {return this->front().second;}
 };
+
+template < typename M, typename I, typename R, typename U>
+void increaseEnumerate(int s, int e,
+                      const M& match,
+                      const I& insert,
+                      const R& remove,
+                      const U& update) {
+for (int l = s, r = s; l <= e; ) {
+    while(l == r || r <= e && !match(l, r - 1)) insert (l, r ++);
+    if (match(l, r - 1)) update(l, r - 2);
+    else update(l, r - 1); //右指针越界了也找不到匹配的区间，那自然就是剩下的所有区间了。
+    remove(l ++, r);
+    }
+}
+//本函数在跳出while后， [l, r - 1] 才是符合条件的最小区间（因为while内r已自增）[l, r - 2]就是不符合条件的最大区间， 所以update的是[l, r - 2]。
+
 int main() {
     int n, d;
     cin >> n >> d;
@@ -1190,15 +1204,15 @@ int main() {
     mono_deque<int, less> inc_q;
     int ans = INT_MAX;
     increaseEnumerate(0, n - 1,
-        [&](int l, int r) {
+        [&](int l, int r) { //匹配函数
             return l <= r && dec_q.get_extremum()- inc_q.get_extremum() >= d; 
         },
-        [&](int l, int r) {
+        [&](int l, int r) { //插入函数
             inc_q.push(r, a[r].second);
             dec_q.push(r, a[r].second);
         },
-        [&](int l, int r) {inc_q.shrink_to(l); dec_q.shrink_to(l);},
-        [&](int l, int r) {
+        [&](int l, int r) {inc_q.shrink_to(l); dec_q.shrink_to(l);}, //删除函数
+        [&](int l, int r) { // 更新函数
             if (r + 1 == n) return;
             ans = min(ans, a [r + 1].first - a[l].first);
         });

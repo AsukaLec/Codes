@@ -1,3 +1,6 @@
+#include <bits/stdc++.h>
+using namespace std;
+
 //test  Part 1 1.4
 // #include <bits/stdc++.h>
 // using namespace std;
@@ -1502,9 +1505,6 @@
 // }
 
 
-#include <bits/stdc++.h>
-using namespace std;
-
 // int main() {
 //     deque<int> dq;
 //     dq.push_back(1);
@@ -1937,63 +1937,63 @@ using namespace std;
 // }
 
 
-template < typename M, typename I, typename R, typename U>
-void increaseEnumerate(int s, int e,
-                      const M& match,
-                      const I& insert,
-                      const R& remove,
-                      const U& update) {
-for (int l = s, r = s; l <= e; ) {
-    while(l == r || r <= e && !match(l, r - 1)) insert (l, r ++);
-    if (match(l, r - 1)) update(l, r - 2);
-    else update(l, r - 1); //右指针越界了也找不到匹配的区间，那自然就是剩下的所有区间了。
-    remove(l ++, r);
-    }
-}
-//本函数在跳出while后， [l, r - 1] 才是符合条件的最小区间（因为while内r已自增）[l, r - 2]就是不符合条件的最大区间， 所以update的是[l, r - 2]。
+// template < typename M, typename I, typename R, typename U>
+// void increaseEnumerate(int s, int e,
+//                       const M& match,
+//                       const I& insert,
+//                       const R& remove,
+//                       const U& update) {
+// for (int l = s, r = s; l <= e; ) {
+//     while(l == r || r <= e && !match(l, r - 1)) insert (l, r ++);
+//     if (match(l, r - 1)) update(l, r - 2);
+//     else update(l, r - 1); //右指针越界了也找不到匹配的区间，那自然就是剩下的所有区间了。
+//     remove(l ++, r);
+//     }
+// }
+// //本函数在跳出while后， [l, r - 1] 才是符合条件的最小区间（因为while内r已自增）[l, r - 2]就是不符合条件的最大区间， 所以update的是[l, r - 2]。
 
 
-template <typename T, template <typename> typename Cmp = greater>
-class mono_deque : public deque<pair<int, T>>{ // Monotonic 单调
-    public:
-    //将元素保存到末尾并自动保持单调性
-    mono_deque & push(int idx, const T &x) {
-        while (!this->empty() && !Cmp<T>()(this->back().second, x)) this->pop_back();
-        this->push_back({idx, x});
-        return *this;
-    }
-    //将队列中坐标小于等于 idx 的元素删除
-    mono_deque & shrink_to(int idx = -1) {
-        while (!this->empty() && this->front().first <= idx) this->pop_front();
-        return *this;
-    }
-    //获取当前队列中的极值
-    T get_extremum() {return this->front().second;}
-};
-int main() {
-    int n, d;
-    cin >> n >> d;
-    vector<pair<int, int>> a(n);
-    for (auto &[x, y] : a) cin >> x >> y;
+// template <typename T, template <typename> typename Cmp = greater>
+// class mono_deque : public deque<pair<int, T>>{ // Monotonic 单调
+//     public:
+//     //将元素保存到末尾并自动保持单调性
+//     mono_deque & push(int idx, const T &x) {
+//         while (!this->empty() && !Cmp<T>()(this->back().second, x)) this->pop_back();
+//         this->push_back({idx, x});
+//         return *this;
+//     }
+//     //将队列中坐标小于等于 idx 的元素删除
+//     mono_deque & shrink_to(int idx = -1) {
+//         while (!this->empty() && this->front().first <= idx) this->pop_front();
+//         return *this;
+//     }
+//     //获取当前队列中的极值
+//     T get_extremum() {return this->front().second;}
+// };
+// int main() {
+//     int n, d;
+//     cin >> n >> d;
+//     vector<pair<int, int>> a(n);
+//     for (auto &[x, y] : a) cin >> x >> y;
 
-    sort(a.begin(),a.end());
+//     sort(a.begin(),a.end());
 
-    mono_deque<int, greater> dec_q;
-    mono_deque<int, less> inc_q;
-    int ans = INT_MAX;
-    increaseEnumerate(0, n - 1,
-        [&](int l, int r) {
-            return l <= r && dec_q.get_extremum()- inc_q.get_extremum() >= d; 
-        },
-        [&](int l, int r) {
-            inc_q.push(r, a[r].second);
-            dec_q.push(r, a[r].second);
-        },
-        [&](int l, int r) {inc_q.shrink_to(l); dec_q.shrink_to(l);},
-        [&](int l, int r) {
-            if (r + 1 == n) return;
-            ans = min(ans, a [r + 1].first - a[l].first);
-        });
-    cout << (ans == INT_MAX ? -1 : ans) << endl;
-}
+//     mono_deque<int, greater> dec_q;
+//     mono_deque<int, less> inc_q;
+//     int ans = INT_MAX;
+//     increaseEnumerate(0, n - 1,
+//         [&](int l, int r) {
+//             return l <= r && dec_q.get_extremum()- inc_q.get_extremum() >= d; 
+//         },
+//         [&](int l, int r) {
+//             inc_q.push(r, a[r].second);
+//             dec_q.push(r, a[r].second);
+//         },
+//         [&](int l, int r) {inc_q.shrink_to(l); dec_q.shrink_to(l);},
+//         [&](int l, int r) {
+//             if (r + 1 == n) return;
+//             ans = min(ans, a [r + 1].first - a[l].first);
+//         });
+//     cout << (ans == INT_MAX ? -1 : ans) << endl;
+// }
 
