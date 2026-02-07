@@ -12,6 +12,12 @@
 - * - * -
 - [x] 111
 - [ ] 111
+<blockquote class="blue-quote">这是自定义左侧蓝线的引用</blockquote>
+<style>
+.blue-quote { border-left: 4px solid #2b8bf2; padding-left: 12px; color: #333; }
+</style>
+
+
 ``` c++
 #include <bits/stdc++.h>
 using namespace std;

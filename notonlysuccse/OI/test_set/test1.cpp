@@ -626,3 +626,637 @@ using namespace std;
 //     }
 //     cout << ans << "\n";
 // }
+
+
+// 7.1
+// int main() {
+//     ios::sync_with_stdio(false);
+//     cin.tie(NULL); cout.tie(NULL);
+
+//     int n, m; 
+//     cin >> n >> m;
+//     vector<int> vec(n);
+//     for (auto &x : vec) cin >> x;
+
+//     int target;
+
+//     auto match = [&](int mid) {
+//         return vec[mid] >= target;
+//     };
+
+//     while (m --) {
+//         cin >> target;
+//         int idx = get_first_match<int, decltype(match)>(0, n -1, match);
+//         cout << (target == vec[idx] ? idx + 1 : -1) << " ";
+//     }
+// }
+
+
+
+
+// 7.2 
+// int main () {
+//     cin.tie(0)->sync_with_stdio(false);
+//     cout.tie(0)->sync_with_stdio(false);
+
+//     int n, k;
+//     cin >> n >> k;
+//     vector<int> nums(n);
+//     for (auto &x : nums) cin >> x;
+
+//     int lo = *max_element(nums.begin(), nums.end());
+//     int hi = accumulate(nums.begin(), nums.end(), 0);
+
+//     vector<int> PartialSum(n);
+//     partial_sum(nums.begin(), nums.end(), PartialSum.begin());
+
+//     // for (auto &x: PartialSum) {
+//     //     cout << x << " ";
+//     // }
+
+//     auto match = [&](int mid) {
+//         int l = 0, r = 0;
+//         int count = 0;
+//         while (r < n) {
+//             while (r < n && PartialSum[r] - (l == 0 ? 0 : PartialSum[l - 1]) <= mid) {
+//                 r ++;
+//             }
+//             count ++;
+//             l = r;
+//         }
+//         return count <= k;
+//     };
+
+//     int x = get_first_match(lo, hi, match);
+//     cout << x << "\n";
+// }
+
+//  7.3
+
+// int  main() {
+//     cin.tie(0)->sync_with_stdio(false);
+//     cout.tie(0)->sync_with_stdio(false);
+
+//     int n; cin >> n;
+//     long long  m; cin >> m;
+//     vector<int> a(n), b(n);
+//     for (auto &x : a) cin >> x;
+//     for (auto &x : b) cin >> x;
+
+//     auto match = [&](int mid) {
+//         long long cur = 0;
+//         for (int i = 0; i < n; i ++) {
+//             if (a[i] < mid) {
+//                 if (b[i] < mid - a[i]) return true;
+//                 cur += mid - a[i];
+//             } 
+
+//             if (cur > m) return true;
+//         }
+//         return false;
+//     };
+
+//     int lo = 0;
+//     int hi = 1e9;
+//     int ans = get_first_match(lo, hi, match);
+
+//     cout << ans - 1 << "\n";
+// }
+
+// 7.4
+
+// int main() {
+//     int l, n, m;
+//     cin >> l >> n >> m;
+//     vector<int> stones (n + 2, 0);
+//     for (int i = 1; i <= n; i ++) {cin >> stones[i];}
+//     stones[n + 1] = l;
+
+//     int lo = 0;
+//     int hi = l + 1;
+//     auto match = [&](int mid) {
+//         int cnt = 0;
+//         int interval = 0;
+
+//         for (int i = 1; i < n + 2; i ++) {
+//             interval += stones[i] - stones[i - 1];
+//             if (interval >= mid) {
+//                 interval = 0;
+//                 continue;
+//             } else {
+//                 cnt ++;
+//             }
+//             if  (cnt > m) return true;
+//         }
+//         return false;
+//     };
+
+//     int ans = get_first_match(lo, hi, match);
+//     cout << --ans << "\n";
+// }
+
+// 7.5 
+
+// const double eps = 1e-6;
+// double lo = -3, hi = 3;
+// while (lo + eps < hi) {
+//     double mid = (lo + hi) / 2;
+//     if (match(mid)) hi = mid;
+//     else lo = mid;
+// }
+// return lo; // 或 hi
+// //return hi 也许
+
+
+
+// int main() {
+//     double a, b, c, d;
+//     cin >> a >> b >> c >> d;
+//     double lo = -100.0, hi = 100.0;
+//     double ans1, ans2, ans3;
+//     double eps = 1e-6;
+
+//     while (lo + eps < hi) {
+//         double mid = (lo + hi) / 2;
+//         double fhi = a * hi * hi * hi + b * hi * hi + c * hi + d;
+//         double flo = a * lo * lo * lo + b * lo * lo + c * lo + d;
+//         double fmid = a * mid * mid * mid + b * mid * mid + c * mid + d;
+
+//         if (fhi * fmid < 0) {
+//             lo = mid;
+//         } else if (flo * fmid < 0) {
+//             hi = mid;
+//         }
+//     }
+//     ans1 = lo;
+
+//     lo = ans1 + 1;
+//     hi = 100.0;
+//     while (lo + eps < hi) {
+//         double mid = (lo + hi) / 2;
+//         double fhi = a * hi * hi * hi + b * hi * hi + c * hi + d;
+//         double flo = a * lo * lo * lo + b * lo * lo + c * lo + d;
+//         double fmid = a * mid * mid * mid + b * mid * mid + c * mid + d;
+
+//         if (fhi * fmid < 0) {
+//             lo = mid;
+//         } else if (flo * fmid < 0) {
+//             hi = mid;
+//         }
+//     }
+//     ans2 = hi;
+
+//     lo = ans1 + 1;
+//     hi = ans2 - 1;
+//     while (lo + eps < hi) {
+//         double mid = (lo + hi) / 2;
+//         double fhi = a * hi * hi * hi + b * hi * hi + c * hi + d;
+//         double flo = a * lo * lo * lo + b * lo * lo + c * lo + d;
+//         double fmid = a * mid * mid * mid + b * mid * mid + c * mid + d;
+
+//         if (fhi * fmid < 0) {
+//             lo = mid;
+//         } else if (flo * fmid < 0) {
+//             hi = mid;
+//         }
+//     }
+//     ans3 = hi;
+
+//     cout << fixed << setprecision(2) << ans1 << "\n" << ans2 << "\n" << ans3 << "\n";
+
+// }
+
+// // 7.5
+// const double eps = 1e-6;
+// int main() {
+//     cin.tie(0)->sync_with_stdio(false);
+//     cout.tie(0)->sync_with_stdio(false);
+
+//     double a, b, c, d;
+//     cin >> a >> b >> c >> d;
+//     auto f = [&](double x) {
+//         return a * pow(x, 3) + b * pow(x, 2) + c * x + d;
+//     };
+
+//     vector<double> roots;
+//     //处理整数的情况
+//     for (int x = -100; x <= 100; x ++) if(abs(f(x)) < eps) roots.push_back(x);
+
+
+//     for (int x = -100; x <= 99; x ++) {
+//         double f1 = f(x);
+//         double f2 = f(x + 1);
+//         if (f1 * f2 > -eps) continue;
+//         double lo = x, hi = x + 1;
+//         while (lo + eps < hi) {
+//             double mid = (lo + hi) / 2;
+//             if (f(mid) * f1 > 0) lo = mid;
+//             else hi = mid;
+//         }
+//         roots.push_back(lo);
+//     }
+
+    
+//     sort(roots.begin(), roots.end());
+//     cout << fixed << setprecision(2);
+//     for (auto &x : roots) cout << x << " ";
+// }
+
+
+// 7.6
+
+
+
+// int main() {
+//     cin.tie(0)->sync_with_stdio(false);
+//     cout.tie(0)->sync_with_stdio(false);
+//     int n, m, k;
+//     cin >> n >> m >> k;
+
+//     vector<int> a(n);
+//     vector<int> b(m);
+//     for (auto &x : a) cin >> x;
+//     for (auto &x : b) cin >> x;
+//     sort(a.begin(), a.end());
+//     sort(b.begin(), b.end());
+
+//     auto match = [&](int mid) {
+//         int cnt = 0;
+//         for (auto A: a) {
+//             cnt += (upper_bound(b.begin(), b.end(), mid - A) - b.begin());
+//         }
+//         return cnt >= k; 
+//     };
+
+//     int ans = get_first_match(a[0] + b[0], a[n - 1] + b[m - 1], match);
+//     cout << ans << "\n";
+// }
+
+
+
+// 7.7
+
+// int main() {
+//     int n, m;
+//     cin >> n >> m;
+//     vector<int> b(n);
+//     priority_queue<pair<int, int>> pq;
+
+//     for (int i = 0; i < n; i ++) {
+//         int x; cin >> x;
+//         pq.push({x, i});
+//         cin >> b[i];
+//     }
+
+//     // while(!pq.empty()) {
+//     //     cout << pq.top().first << " " << pq.top().second << endl;
+//     //     pq.pop();
+//     // }
+
+//     // 越大越不可能，所以两极性是反过来的
+//     auto match = [&](long long mid) {
+//         priority_queue<pair<int, int>> temp_pq = pq;
+//         int cnt = 0; long long cur = 0;
+//         while(!temp_pq.empty() && cnt < m) {
+//             auto [price, idx] = temp_pq.top();
+//             temp_pq.pop();
+//             cur += price * 1ll; cnt ++;
+            
+//             if (price - b[idx] > 0) {
+//                 temp_pq.push({price - b[idx], idx});
+//             }
+//         }
+//         if (cur <mid) return true;
+//         else return false;
+//     };
+
+//     long  long ans = get_first_match(0ll, (long long)1e15, match);
+//     cout << ans - 1 << "\n";
+// }
+
+// int main() {
+//     cin.tie(0)->sync_with_stdio(false);
+//     cout.tie(0)->sync_with_stdio(false);
+//     int n, m;
+//     cin >> n >> m;
+//     vector<pair<int, int>> skills(n);
+//     for (auto &[a, b] : skills) cin >> a >> b;
+    
+//     auto match = [&](int x) {
+//         long long cnt = 0;
+//         for (auto &[a, b] :skills) {
+//             if (a < x) continue;
+//             cnt += (a - x) / b + 1;
+//         }
+//         return cnt <= m;
+//     };
+//     int maxSkills = get_first_match(1, 1000000000, match);
+
+//     cout << maxSkills << "\n";
+
+//     long long sum = 0;
+//     int totalCnt = 0;
+//     for (auto &[a, b] : skills) {
+//         if (a < maxSkills) continue;
+//         int cnt = (a - maxSkills) / b + 1;
+//         sum += (a + (a - (cnt - 1) * b)) * 1ll * cnt / 2;
+//         totalCnt += cnt;
+//     }
+
+//     if (totalCnt < m) {
+//         sum += (long long)(maxSkills - 1) * (m - totalCnt);
+//     }
+//     cout << sum << "\n";
+// }
+
+
+//7.8
+
+// int main() {
+//     cin.tie(0)->sync_with_stdio(false);
+
+//     int A, B, C, m;
+//     cin >> A >> B >> C >> m;
+//     // 层 列 行
+//     auto hp = vector(A + 2, vector(B + 2, vector<int>(C + 2)));
+//     for (int i = 1; i <= A; i ++) {
+//         for (int j = 1; j <= B; j ++) {
+//             for (int k = 1; k <= C; k ++) {
+//                 cin >> hp[i][j][k];
+//             }
+//         }
+//     }
+//     //每一次攻击用元组存下来
+//     vector<tuple<int, int, int, int, int, int, int>> attacks(m);
+//     for (auto &[a, b, c, d, e, f, g] : attacks) {
+//         cin >> a >> b >> c >> d >> e >> f >> g;
+//     }
+
+//     auto match = [&](int mid) {
+//         auto diff = vector(A + 2, vector(B + 2, vector<long long>(C + 2)));
+//         for (int i = 0; i < mid; i ++) {
+//             auto [la, ra, lb, rb, lc, rc, d] = attacks[i];
+//             //接下来是三维差分 类比想想一维，左边的加，右边的减
+//             // 三个都在左边，加 d
+//             diff[la][lb][lc] += d;
+//             // 两个在左边，一个在右边，减 d
+//             diff[la][lb][rc + 1] -= d;
+//             diff[la][rb + 1][lc] -= d;
+//             diff[ra + 1][lb][lc] -= d;
+//             // 一个在左边，两个在右边，加 d
+//             diff[la][rb + 1][rc + 1] += d;
+//             diff[ra + 1][lb][rc + 1] += d;
+//             diff[ra + 1][rb + 1][lc] += d;
+//             // 三个都在右边，减 d
+//             diff[ra + 1][rb + 1][rc + 1] -= d;
+//         }
+//         // 三维前缀和
+//         for (int i = 1; i <= A; i ++) {
+//             for (int j = 1; j <= B; j ++) {
+//                 for (int k = 1; k <= C; k ++) {
+//                     diff[i][j][k] += diff[i][j][k-1]
+//                                   +  diff[i][j-1][k]
+//                                   +  diff[i-1][j][k]
+//                                   -  diff[i-1][j-1][k]
+//                                   -  diff[i-1][j][k-1]
+//                                   -  diff[i][j-1][k-1]
+//                                   +  diff[i-1][j-1][k-1];
+//                     if (diff[i][j][k] > hp[i][j][k]) return true;
+//                 }
+//             }
+//         }
+//         return false;
+//     };
+//     int ans = get_first_match(1, m, match);
+//     cout << ans << endl;
+// }
+
+// int main(){
+//     // int ans = 0;
+//     // auto match =[&](int mid) {return false;};
+//     // ans = get_first_match(0, 100, match);
+//     // cout << ans << "\n";
+
+//     int n, m;
+//     cin >> n >> m;
+//     vector<int> rooms(n);
+//     for (auto &x : rooms) cin >> x;
+
+//     vector<tuple<int, int, int>> rent(m);
+//     for (auto & [d, s, t] : rent) cin >> d >> s >> t;
+
+//     int mid = m / 2;
+
+//     vector<int> diff(n + 1, 0);
+//     for (int i = 0; i < mid; i ++) {
+//         auto &[d, s, t] = rent[i];
+//         diff[s] += d;
+//         diff[t + 1] -= d;
+//     }
+//     partial_sum(diff.begin(), diff.end(), diff.begin());
+//     for (auto &x : diff) cout << x << " "; 
+// }
+
+// int main() {
+//     int  n, m;
+//     cin >> n >> m;
+//     vector<int> rooms(n);
+//     for (auto &x : rooms) cin >> x;
+
+//     vector<tuple<int, int, int>> rent(m);
+//     for (auto & [d, s, t] : rent) cin >> d >> s >> t;
+
+//     auto match = [&](int mid) {
+//         vector<long long> diff(n + 2, 0); // 差分的小trick 要开大两格，分别在首尾，避免越界
+//         for (int i = 0; i < mid; i ++) {
+//             auto &[d, s, t] = rent[i];
+//             diff[s] += d;
+//             diff[t + 1] -= d;
+//         }
+//         for (int i = 1; i <= n; i ++) { //在尾部开多的那一格在前缀和的时候不用考虑
+//             diff[i] += diff[i - 1];
+//             if (diff[i] > rooms[i - 1]) return true;
+//         }
+//         return false;
+//     };
+
+//     int ans = get_first_match(0, m, match);
+//     if (ans == m + 1) cout << 0 << endl; //注意越界条件，二分找不到的时候（即全false，输出的是m + 1）
+//     else cout << -1 << endl << ans << endl;
+// }
+
+
+// //7.10
+// int main() {
+//     int n, m;
+//     long long s;
+//     cin >> n >> m >> s;
+//     vector<pair<int, int>> stones(n + 1);
+//     int maxW = 0;
+//     for (int i = 1; i < n + 1; i ++){
+//         cin >> stones[i].first >> stones[i].second;
+//         maxW = max(maxW, stones[i].first);
+//     }
+//     vector<pair<int, int>> segs(m);
+//     for (auto &[a, b] : segs) cin >> a >> b;
+
+//     auto calc = [&](int w) {
+//         vector<int> cnt (n + 1);
+//         vector<long long> val (n + 1);
+//         for (int i = 1; i <= n; i ++) {
+//             cnt[i] = cnt[i - 1] + (stones[i].first >= w);
+//             val[i] = val[i - 1] + (stones[i].first >= w) * stones[i].second;
+//         }
+//         long long total = 0; 
+//         for (auto &[l, r]: segs) {
+//             total += (cnt[r] - cnt[l - 1]) * (val[r] - val[l - 1]) * 1ll;
+//         }
+//         return total;
+//     };
+
+//     auto match = [&](int mid) {
+//         return calc(mid) < s;
+//     };
+
+//     int minW = get_first_match(1, maxW, match);
+
+//     long long sub1 = abs(calc(minW) - s);
+//     long long sub2 = abs(calc(minW - 1) - s);
+
+//     cout << (sub1 < sub2 ? sub1 : sub2) << "\n";
+
+// }
+
+//7.11
+
+// int main() {
+//     long long n, len;
+//     cin >> n >> len;
+//     vector<pair<int, int>> sges(n);
+//     for (auto &[l, s] : sges) cin >> l >> s;
+
+//     auto match = [&](long long mid) {
+//         vector<long long> pipe(len + 2, 0);
+//         for (auto &[l, s] :sges) {
+//             if (mid >= s) {
+//                 pipe[max(l - (mid - s), 1ll )] += 1;
+//                 pipe[min(l + (mid - s) + 1, len + 1)] -= 1;
+//             }  
+//         }
+//         for (int i = 1; i <= len; i ++) {
+//             pipe[i] += pipe[i - 1];
+//             if (pipe[i] == 0) return false;
+//         }
+//         return true;
+//     };
+
+//     int ans = get_first_match(1ll, (long long)1000000000, match);
+//     cout << ans << endl;
+// }
+
+
+
+// int main() {
+//     cin.tie(0)->sync_with_stdio(false);
+//     int n, len;
+//     cin >> n >> len;
+//     vector<pair<int, int>> pipes(n);
+//     for (auto &[x, s] : pipes) cin >> x >> s;
+
+//     auto match = [&](int time) {
+//         vector<pair<int, long long>> segs;
+//         for (auto &[x, s] :pipes) {
+//             int delta = time - s;
+//             if (delta < 0) continue;
+//             segs.emplace_back(x- delta, x + delta);
+//         }
+//         sort(segs.begin(), segs.end());
+//         long long maxRight = 0;
+//         for (auto &[l, r] : segs) {
+//             if (l <= maxRight + 1) {
+//                 maxRight = max(maxRight, r);
+//             } else {
+//                 return false;
+//             }
+//         }
+//         return maxRight >= len;
+//     };
+
+//     int ans = get_first_match(1, INT_MAX, match);
+//     cout << ans << "\n";
+// }
+
+// int main() {
+//     cin.tie(0)->sync_with_stdio(false);
+//     int n, len;
+//     cin >> n >> len;
+//     vector<pair<int, int>> pipes(n);
+//     for (auto &[x, s] : pipes) cin >> x >> s;
+
+//     sort(pipes.begin(), pipes.end(), [](auto &a, auto &b) {
+//         return a.first + a.second < b.first + b.second; // 按照 s 升序排序
+//     });
+
+//     auto match = [&](int time) {
+//         vector<pair<int, long long>> segs;
+//         for (auto &[x, s] :pipes) {
+//             int delta = time - s;
+//             if (delta < 0) continue;
+//             segs.emplace_back(x- delta, x + delta);
+//         }
+//         long long maxRight = 0;
+//         for (auto &[l, r] : segs) {
+//             if (l <= maxRight + 1) {
+//                 maxRight = max(maxRight, r);
+//             } else {
+//                 return false;
+//             }
+//         }
+//         return maxRight >= len;
+//     };
+
+//     int ans = get_first_match(1, INT_MAX, match);
+//     cout << ans << "\n";
+// }
+
+// 7.12
+
+template<typename T, typename M>
+T get_first_match(T lo, T hi, M match) {
+    while (lo <= hi) {
+        T mid = lo + (hi - lo) / 2;
+        if (match(mid)) hi = mid - 1;
+        else lo = mid + 1;
+    }
+    return lo;
+}
+
+int main() {
+    cin.tie(0)->sync_with_stdio(false);
+    int n, k, T;
+    cin >> n >> k >> T;
+    vector<int> a(n);
+    for (auto &x : a) cin >> x;
+
+    auto match = [&](int mid) {
+        vector<int> b(a.begin(), a.begin() + mid);
+        sort(b.begin(), b.end());
+        vector<long long> sum(mid + 1), sum2(mid + 1);
+        for (int i = 1; i <= mid; i ++){
+            sum[i] = sum[i - 1] + b[i - 1];
+            sum2[i] = sum2[i - 1] + 1ll * b[i - 1] * b[i - 1];
+        }
+
+        for (int i = k; i <= mid; i ++) {
+            int l = i - k + 1, r = i;
+            double avg = (double)(sum[r] - sum[l - 1]) / k;
+            double var = (sum2[r] - sum2[l - 1] - 2 * avg * (sum[r] - sum[l - 1]) + k * avg * avg) / k;
+            if (var <= T) return true;
+        }
+        return false;
+    };
+
+    int ans  = get_first_match(k, n, match);
+    if (ans == n + 1) cout << -1 << "\n";
+    else cout << ans << "\n";
+}
