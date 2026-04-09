@@ -1,6 +1,6 @@
 import serial, csv, datetime, os
 
-PORT  = 'COM4'
+PORT  = 'COM3'
 BAUD  = 9600
 FNAME = datetime.datetime.now().strftime('%Y%m%d_%H%M%S') + '_ECG_GSR.csv'
 

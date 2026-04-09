@@ -109,6 +109,7 @@
         "name": "JavaSE-11",
         "path": "E:\\Eclipse Adoptium\\jdk-11.0.28.6-hotspot"
     }
-    ]
+    ],
+    "markdown.validate.enabled": false
 
 }

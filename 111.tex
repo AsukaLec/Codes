@@ -1,0 +1,91 @@
+graph TD
+    %% 定义样式
+    classDef data fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef process fill:#e1f5fe,stroke:#0277bd,stroke-width:1px,rx:5,ry:5;
+    classDef decision fill:#fff9c4,stroke:#fbc02d,stroke-width:1px;
+    classDef core fill:#d1c4e9,stroke:#512da8,stroke-width:2px,rx:10,ry:10;
+
+    %% 节点定义
+    Start(F1气动稳定性 Kaggle 公开数据集<br/>15万组模拟数据) --> Pre_Process[数据预处理]
+    
+    subgraph Prepare[数据准备阶段]
+    Pre_Process --> |实现方式| Reg[常规归一化]
+    Pre_Process --> |实现方式| Corr[特征相关性分析]
+    Pre_Process --> |实现方式| Cluster[基于气动稳定性的<br/>离散聚类分层]
+    end
+
+    Cluster --> Split{数据集划分}
+    Split --> |12万组| Train_Set[训练集]
+    Split --> |3万组| Test_Set[测试集]
+
+    subgraph Model_Building[阶段一：神经网络代理模型构建]
+    Train_Set --> BP_Init[构建 MLP 结构 BP 神经网络<br/>隐藏层激活函数: ReLU]
+    BP_Init --> BP_Train[误差反向传播训练]
+    BP_Train --> |生成| Proxy_Model((高保真虚拟风洞模型<br/>用于实时预测))
+    end
+
+    subgraph Optimization[阶段二：基于 PSO 的全局参数寻优]
+    Proxy_Model --> PSO_Init[初始化 PSO 粒子群<br/>位置代表气动调校方案]
+    PSO_Init --> PSO_Run[运行 PSO 融合算法<br/>进行全局并行搜索]
+    end
+
+    PSO_Run --> Final_Result[输出特定工况下的<br/>最优气动参数组合]
+
+    subgraph Evaluation[实验设计与评价]
+    Test_Set --> Eval_Predict[回归预测对比实验<br/>对照组: 多元线性回归/随机森林]
+    Final_Result --> Eval_Opt[参数寻优对比实验<br/>对照组: 梯度搜索/试错法]
+    
+    Eval_Predict & Eval_Opt --> Metrics[计算评价指标]
+    end
+
+    %% 指标细分
+    Metrics --> |拟合质量| M_Reg[MSE / R²]
+    Metrics --> |搜索效率| M_Opt[收敛代数 / 寻优耗时 / 结果一致性]
+
+    %% 应用样式
+    class Start data;
+    class Pre_Process,Reg,Corr,Cluster,Split,BP_Init,BP_Train,PSO_Init,Eval_Predict,Eval_Opt,Metrics,M_Reg,M_Opt process;
+    class Proxy_Model core;
+
+
+
+
+
+
+
+
+% graph TD
+%     %% 定义样式
+%     classDef model fill:#d1c4e9,stroke:#512da8,stroke-width:2px;
+%     classDef pso fill:#e1f5fe,stroke:#0277bd,stroke-width:1px;
+%     classDef decision fill:#fff9c4,stroke:#fbc02d,stroke-width:1px;
+
+%     %% 节点
+%     Step_Start(开始寻优) --> Define_Space[定义寻优参数空间<br/>由物理规则确定边界]
+    
+%     Proxy_((已训练的<br/>BP 代理模型)) -.-> |作为适应度函数| Calc_Fitness
+
+%     subgraph PSO_Core[PSO 迭代寻优过程]
+%     Define_Space --> Init_Particles[初始化粒子群<br/>随机生成位置与速度]
+    
+%     Init_Particles --> Loop_Start(迭代开始)
+%     Loop_Start --> Calc_Fitness[将粒子位置输入 BP 模型<br/>获取预测稳定性数值]
+    
+%     Calc_Fitness --> Update_Pbest[更新个体极值 pbest]
+%     Update_Pbest --> Update_Gbest[更新全局极值 gbest]
+    
+%     Update_Gbest --> Adapt_Weight[计算自适应惯性权重<br/>前期大用于搜索，后期小用于收敛]
+%     Adapt_Weight --> Update_Vec[更新粒子速度与位置]
+    
+%     Update_Vec --> Boundary_Check[边界检查与约束处理]
+    
+%     Boundary_Check --> Distance_Cond{适应度增益平稳<br/>或达到最大迭代次数?}
+%     end
+
+%     Distance_Cond -- 否 --> Loop_Start
+%     Distance_Cond -- 是 --> Step_End(输出群体全局最优解 gbest<br/>即最优气动调校参数)
+
+%     %% 样式应用
+%     class Proxy_ model;
+%     class Init_Particles,Loop_Start,Calc_Fitness,Update_Pbest,Update_Gbest,Adapt_Weight,Update_Vec,Boundary_Check,Define_Space,Step_End pso;
+%     class Distance_Cond decision;
