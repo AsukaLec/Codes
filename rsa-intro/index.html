@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSA 算法 - 现代密码学基石</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --primary: #6c5ce7;
+    --primary-dark: #4a3cb5;
+    --secondary: #00cec9;
+    --accent: #fd79a8;
+    --dark: #0a0a1a;
+    --darker: #06060f;
+    --light: #f8f9ff;
+    --gray: #8892b0;
+    --card-bg: rgba(255,255,255,0.04);
+    --radius: 20px;
+    --shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', 'Noto Sans SC', sans-serif;
+    background: var(--darker);
+    color: var(--light);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  /* ===== Canvas Background ===== */
+  #particles-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ===== Navbar ===== */
+  .navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(6,6,15,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: transform 0.3s;
+  }
+  .navbar.hidden { transform: translateY(-100%); }
+  .nav-inner {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    font-weight: 800;
+    font-size: 1.3rem;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .nav-links {
+    display: flex;
+    gap: 1.8rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--gray);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: color 0.3s;
+    letter-spacing: 0.3px;
+  }
+  .nav-links a:hover { color: var(--light); }
+
+  /* ===== Sections ===== */
+  section { position: relative; z-index: 1; }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ===== Hero ===== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+  }
+  .hero-content { max-width: 860px; }
+  .hero-badge {
+    display: inline-block;
+    padding: 0.35rem 1.2rem;
+    border-radius: 100px;
+    background: rgba(108,92,231,0.15);
+    border: 1px solid rgba(108,92,231,0.3);
+    color: var(--primary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero p {
+    font-size: 1.15rem;
+    color: var(--gray);
+    max-width: 640px;
+    margin: 0 auto 2.5rem;
+    font-weight: 300;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    border-radius: 60px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.3s;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    box-shadow: 0 8px 30px rgba(108,92,231,0.35);
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(108,92,231,0.5);
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--light);
+    border: 1.5px solid rgba(255,255,255,0.15);
+  }
+  .btn-outline:hover {
+    border-color: var(--primary);
+    background: rgba(108,92,231,0.1);
+  }
+  .scroll-indicator {
+    margin-top: 3.5rem;
+    animation: bounce 2s infinite;
+  }
+  .scroll-indicator svg { opacity: 0.4; }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+
+  /* ===== Section Common ===== */
+  .section-title {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  .section-title h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 0.8rem;
+  }
+  .section-title p {
+    color: var(--gray);
+    font-size: 1.05rem;
+    max-width: 560px;
+    margin: 0 auto;
+    font-weight: 300;
+  }
+  .section-title .accent-line {
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 4px;
+    margin: 1rem auto 0;
+  }
+
+  /* ===== Timeline / Steps ===== */
+  .steps { padding: 6rem 0; }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .step-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    padding: 2.2rem;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .step-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .step-card:hover::before { opacity: 1; }
+  .step-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(108,92,231,0.2);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  }
+  .step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    background: rgba(108,92,231,0.15);
+    color: var(--primary);
+    font-weight: 800;
+    font-size: 1.1rem;
+    margin-bottom: 1.2rem;
+  }
+  .step-card h3 {
+    font-size: 1.15rem;
+    margin-bottom: 0.6rem;
+    font-weight: 700;
+  }
+  .step-card p {
+    color: var(--gray);
+    font-size: 0.9rem;
+    font-weight: 300;
+  }
+
+  /* ===== Math Section ===== */
+  .math { padding: 6rem 0; }
+  .math-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .math-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.4s;
+  }
+  .math-card:hover {
+    border-color: rgba(108,92,231,0.2);
+    transform: translateY(-4px);
+  }
+  .math-icon {
+    font-size: 2.4rem;
+    margin-bottom: 1rem;
+  }
+  .math-card h3 { font-size: 1rem; margin-bottom: 0.5rem; }
+  .math-card p {
+    color: var(--gray);
+    font-size: 0.85rem;
+    font-weight: 300;
+    margin-bottom: 1rem;
+  }
+  .math-formula {
+    display: block;
+    padding: 0.8rem 1rem;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    color: var(--secondary);
+    border: 1px solid rgba(0,206,201,0.15);
+  }
+
+  /* ===== Interactive Demo ===== */
+  .demo { padding: 6rem 0; }
+  .demo-box {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    padding: 3rem;
+    max-width: 780px;
+    margin: 0 auto;
+  }
+  .demo-box h3 {
+    text-align: center;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+  .demo-box > p {
+    text-align: center;
+    color: var(--gray);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+  .demo-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .demo-row label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--gray);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .demo-row input {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: var(--light);
+    font-size: 0.95rem;
+    font-family: 'Courier New', monospace;
+    transition: border-color 0.3s;
+    outline: none;
+  }
+  .demo-row input:focus { border-color: var(--primary); }
+  .demo-row input:disabled { opacity: 0.5; }
+  .demo-arrow {
+    color: var(--primary);
+    font-size: 1.5rem;
+    font-weight: 300;
+  }
+  .demo-result {
+    margin-top: 1.5rem;
+    padding: 1.2rem;
+    background: rgba(108,92,231,0.08);
+    border-radius: 12px;
+    border: 1px solid rgba(108,92,231,0.15);
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    word-break: break-all;
+    min-height: 3rem;
+  }
+  .demo-btn {
+    display: block;
+    margin: 1.5rem auto 0;
+    padding: 0.75rem 2rem;
+    border-radius: 60px;
+    border: none;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .demo-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(108,92,231,0.35); }
+  .demo-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .demo-slider-row label { min-width: 80px; font-size: 0.8rem; color: var(--gray); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .demo-slider-row input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.1);
+    outline: none;
+  }
+  .demo-slider-row input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+  }
+  .demo-slider-row span { font-size: 0.85rem; color: var(--secondary); font-weight: 600; min-width: 30px; text-align: right; }
+
+  /* ===== Security ===== */
+  .security { padding: 6rem 0; }
+  .security-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+  .security-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.4s;
+  }
+  .security-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(253,121,168,0.2);
+  }
+  .security-card .icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  .security-card h3 { font-size: 1rem; margin-bottom: 0.5rem; }
+  .security-card p { color: var(--gray); font-size: 0.85rem; font-weight: 300; }
+
+  /* ===== Diagram Section ===== */
+  .diagram { padding: 6rem 0; }
+  .diagram-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+  .diagram-step {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 1.2rem 1.5rem;
+    text-align: center;
+    min-width: 110px;
+    transition: all 0.3s;
+  }
+  .diagram-step:hover {
+    border-color: rgba(108,92,231,0.3);
+    background: rgba(108,92,231,0.06);
+  }
+  .diagram-step .label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gray);
+    margin-bottom: 0.2rem;
+  }
+  .diagram-step .value {
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .diagram-step.alice .value { color: var(--primary); }
+  .diagram-step.bob .value { color: var(--secondary); }
+  .diagram-step.eve .value { color: var(--accent); }
+  .diagram-arrow {
+    color: var(--gray);
+    font-size: 1.4rem;
+    font-weight: 300;
+  }
+
+  /* ===== Footer ===== */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    color: var(--gray);
+    font-size: 0.8rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== Reveal Animation ===== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.16,1,0.3,1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    .navbar { padding: 0 1rem; }
+    .nav-links { display: none; }
+    .hero h1 { font-size: 2.4rem; }
+    .demo-box { padding: 1.5rem; }
+    .demo-row { grid-template-columns: 1fr; }
+    .demo-arrow { display: none; }
+    .diagram-flow { flex-direction: column; }
+    .diagram-arrow { transform: rotate(90deg); }
+    .steps-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="particles-canvas"></canvas>
+
+<!-- Navbar -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <div class="nav-logo">RSA</div>
+    <ul class="nav-links">
+      <li><a href="#intro">概述</a></li>
+      <li><a href="#steps">流程</a></li>
+      <li><a href="#math">数学原理</a></li>
+      <li><a href="#demo">交互演示</a></li>
+      <li><a href="#security">安全性</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="intro">
+  <div class="hero-content">
+    <div class="hero-badge">Public-Key Cryptography</div>
+    <h1>
+      <span class="gradient">RSA</span> 算法
+    </h1>
+    <p>
+      非对称加密的黄金标准 · 1977 年由 Rivest、Shamir、Adleman 提出。<br>
+      基于大整数因数分解的数学难题，为互联网安全奠定基石。
+    </p>
+    <div class="hero-actions">
+      <a href="#steps" class="btn btn-primary">了解原理 ↓</a>
+      <a href="#demo" class="btn btn-outline">尝试演示</a>
+    </div>
+    <div class="scroll-indicator">
+      <svg width="24" height="36" viewBox="0 0 24 36" fill="none" stroke="white" stroke-width="2"><rect x="1" y="1" width="22" height="34" rx="11"/><circle cx="12" cy="12" r="2" fill="white"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- Steps -->
+<section class="steps" id="steps">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>RSA 工作流程</h2>
+      <p>从密钥生成到加解密，四个核心步骤构成完整的非对称加密体系</p>
+      <div class="accent-line"></div>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card reveal">
+        <div class="step-number">01</div>
+        <h3>🔑 密钥生成</h3>
+        <p>选择两个大素数 p 和 q，计算 n = p × q 和欧拉函数 φ(n) = (p-1)(q-1)。选择公钥指数 e（与 φ(n) 互质），计算私钥 d ≡ e⁻¹ mod φ(n)。公钥为 (n, e)，私钥为 (n, d)。</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-number">02</div>
+        <h3>📤 加密</h3>
+        <p>发送方使用接收方的公钥 (n, e) 对明文 m 进行加密。密文 c = m<sup>e</sup> mod n。因为 e 是公开的，任何人都可用公钥加密信息，但只有私钥持有者能解密。</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-number">03</div>
+        <h3>📥 解密</h3>
+        <p>接收方使用自己的私钥 (n, d) 对密文 c 进行解密。明文 m = c<sup>d</sup> mod n。解密过程的正确性由欧拉定理保证：m<sup>ed</sup> ≡ m (mod n)。</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-number">04</div>
+        <h3>✍️ 数字签名</h3>
+        <p>RSA 也可用于数字签名：发送方用私钥签名，接收方用公钥验证。签名 s = m<sup>d</sup> mod n，验证 m ≡ s<sup>e</sup> mod n。确保消息的完整性和来源真实性。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Math -->
+<section class="math" id="math">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>数学原理</h2>
+      <p>RSA 的安全性建立在深刻的数论基础之上</p>
+      <div class="accent-line"></div>
+    </div>
+    <div class="math-cards">
+      <div class="math-card reveal">
+        <div class="math-icon">🔢</div>
+        <h3>大整数因数分解</h3>
+        <p>给定两个大素数 p、q 的乘积 n，求 p 和 q 在计算上不可行。这是 RSA 安全性的根本假设。</p>
+        <span class="math-formula">n = p × q</span>
+      </div>
+      <div class="math-card reveal">
+        <div class="math-icon">🔄</div>
+        <h3>欧拉定理</h3>
+        <p>若 a 与 n 互质，则 a<sup>φ(n)</sup> ≡ 1 (mod n)。这是 RSA 加解密正确性的核心证明依据。</p>
+        <span class="math-formula">a<sup>φ(n)</sup> ≡ 1 (mod n)</span>
+      </div>
+      <div class="math-card reveal">
+        <div class="math-icon">🧩</div>
+        <h3>模逆元</h3>
+        <p>私钥 d 是公钥 e 在模 φ(n) 下的乘法逆元。扩展欧几里得算法可高效计算 d。</p>
+        <span class="math-formula">e × d ≡ 1 (mod φ(n))</span>
+      </div>
+      <div class="math-card reveal">
+        <div class="math-icon">⚡</div>
+        <h3>模幂运算</h3>
+        <p>加密和解密都涉及大数的模幂运算。通过快速幂算法（平方乘算法）高效实现。</p>
+        <span class="math-formula">c ≡ m<sup>e</sup> (mod n)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Diagram -->
+<section class="diagram" id="diagram">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>通信模型</h2>
+      <p>Alice 和 Bob 如何通过 RSA 安全通信</p>
+      <div class="accent-line"></div>
+    </div>
+    <div class="diagram-flow reveal">
+      <div class="diagram-step alice">
+        <div class="label">Alice</div>
+        <div class="value">明文 m</div>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-step alice">
+        <div class="label">用 Bob 的公钥</div>
+        <div class="value">c = m<sup>e</sup> mod n</div>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-step eve">
+        <div class="label">Eve 窃听</div>
+        <div class="value">只有密文 c</div>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-step bob">
+        <div class="label">Bob</div>
+        <div class="value">m = c<sup>d</sup> mod n</div>
+      </div>
+    </div>
+    <p style="text-align:center;color:var(--gray);font-size:0.85rem;margin-top:1rem;">
+      ⚠️ Eve 即使获取密文 c，没有私钥 d 也无法解密
+    </p>
+  </div>
+</section>
+
+<!-- Interactive Demo -->
+<section class="demo" id="demo">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>交互演示</h2>
+      <p>亲手体验 RSA 加密与解密过程（教学用小素数）</p>
+      <div class="accent-line"></div>
+    </div>
+    <div class="demo-box reveal">
+      <h3>🔐 加密 / 解密</h3>
+      <p>使用小素数 p=61, q=53（n=3233, φ(n)=3120, e=17, d=2753）</p>
+
+      <div class="demo-slider-row">
+        <label>素数位数</label>
+        <input type="range" id="keySize" min="2" max="5" value="2" step="1">
+        <span id="keySizeLabel">2 位</span>
+      </div>
+
+      <div class="demo-row">
+        <label>公钥 (n, e)</label>
+        <span class="demo-arrow"></span>
+        <div style="font-family:'Courier New',monospace;font-size:0.85rem;color:var(--secondary);text-align:right" id="pubKeyDisplay">(3233, 17)</div>
+      </div>
+      <div class="demo-row">
+        <label>私钥 (n, d)</label>
+        <span class="demo-arrow"></span>
+        <div style="font-family:'Courier New',monospace;font-size:0.85rem;color:var(--accent);text-align:right" id="privKeyDisplay">(3233, 2753)</div>
+      </div>
+
+      <div class="demo-row">
+        <label>明文 m</label>
+        <span class="demo-arrow">→</span>
+        <input type="number" id="plaintext" value="42" placeholder="输入数字明文">
+      </div>
+      <div class="demo-row">
+        <label>密文 c</label>
+        <span class="demo-arrow">→</span>
+        <input type="text" id="ciphertext" disabled placeholder="加密后显示">
+      </div>
+      <div class="demo-row">
+        <label>解密结果</label>
+        <span class="demo-arrow">→</span>
+        <input type="text" id="decrypted" disabled placeholder="解密后显示">
+      </div>
+
+      <button class="demo-btn" id="encryptBtn">加密并解密</button>
+      <div class="demo-result" id="demoResult"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Security -->
+<section class="security" id="security">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>安全性分析</h2>
+      <p>RSA 的安全建立在哪些基础之上？</p>
+      <div class="accent-line"></div>
+    </div>
+    <div class="security-grid">
+      <div class="security-card reveal">
+        <div class="icon">🔒</div>
+        <h3>因数分解难题</h3>
+        <p>目前最快的经典算法（GNFS）分解 2048 位整数需要远超宇宙年龄的时间。量子计算机的 Shor 算法才是真正威胁。</p>
+      </div>
+      <div class="security-card reveal">
+        <div class="icon">📏</div>
+        <h3>密钥长度</h3>
+        <p>现代 RSA 推荐使用 2048 位或 4096 位密钥。1024 位已被认为不安全。密钥越长越安全，但加解密速度越慢。</p>
+      </div>
+      <div class="security-card reveal">
+        <div class="icon">⚠️</div>
+        <h3>填充方案</h3>
+        <p>直接使用"教科书 RSA"不安全。必须使用 OAEP 等填充方案防止选择明文攻击和选择密文攻击。</p>
+      </div>
+      <div class="security-card reveal">
+        <div class="icon">🔮</div>
+        <h3>量子威胁</h3>
+        <p>大规模量子计算机可破解 RSA。NIST 正在推进后量子密码学标准化，基于格的加密方案是主要候选。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>RSA Algorithm · 教育用途展示 · Made with ❤️</p>
+</footer>
+
+<script>
+  // ===== Particles =====
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let mouseX = 0, mouseY = 0;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 2 + 0.5;
+      this.speedX = (Math.random() - 0.5) * 0.3;
+      this.speedY = (Math.random() - 0.5) * 0.3;
+      this.opacity = Math.random() * 0.4 + 0.1;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+      if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      // mouse interaction
+      const dx = this.x - mouseX;
+      const dy = this.y - mouseY;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 120) {
+        this.x += dx * 0.005;
+        this.y += dy * 0.005;
+      }
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(108,92,231,${this.opacity})`;
+      ctx.fill();
+    }
+  }
+
+  const pCount = Math.min(120, Math.floor(canvas.width * canvas.height / 8000));
+  for (let i = 0; i < pCount; i++) particles.push(new Particle());
+
+  let mouseParticle = { x: -1000, y: -1000 };
+
+  function drawLines() {
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i+1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 150) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(108,92,231,${0.08 * (1 - dist/150)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    drawLines();
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  // ===== Scroll Navbar =====
+  let lastScroll = 0;
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    const cur = window.scrollY;
+    navbar.classList.toggle('hidden', cur > lastScroll && cur > 100);
+    lastScroll = cur;
+  });
+
+  // ===== Reveal on Scroll =====
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // ===== RSA Interactive Demo =====
+  // Pre-set: p=61, q=53 => n=3233, phi=3120, e=17, d=2753
+  const PRESETS = {
+    2: { p: 61, q: 53, e: 17 },
+    3: { p: 101, q: 103, e: 7 },
+    4: { p: 521, q: 509, e: 17 },
+    5: { p: 1049, q: 997, e: 13 },
+  };
+
+  let currentKeys = { n: 3233, e: 17, d: 2753, phi: 3120 };
+
+  function modPow(base, exp, mod) {
+    let result = 1n;
+    let b = BigInt(base) % BigInt(mod);
+    let e = BigInt(exp);
+    let m = BigInt(mod);
+    while (e > 0n) {
+      if (e & 1n) result = (result * b) % m;
+      b = (b * b) % m;
+      e >>= 1n;
+    }
+    return Number(result);
+  }
+
+  function gcd(a, b) { while (b) { [a,b] = [b, a%b]; } return a; }
+
+  function modInv(a, m) {
+    let [old_r, r] = [a, m];
+    let [old_s, s] = [1, 0];
+    while (r) {
+      const q = Math.floor(old_r / r);
+      [old_r, r] = [r, old_r - q * r];
+      [old_s, s] = [s, old_s - q * s];
+    }
+    return ((old_s % m) + m) % m;
+  }
+
+  function generateKeys(size) {
+    const preset = PRESETS[size];
+    if (!preset) return;
+    const { p, q, e } = preset;
+    const n = p * q;
+    const phi = (p - 1) * (q - 1);
+    // ensure e is coprime with phi
+    let eFinal = e;
+    while (gcd(eFinal, phi) !== 1) eFinal += 2;
+    const d = modInv(eFinal, phi);
+    currentKeys = { n, e: eFinal, d, phi, p, q };
+    return currentKeys;
+  }
+
+  function updateDisplay() {
+    document.getElementById('pubKeyDisplay').textContent = `(${currentKeys.n}, ${currentKeys.e})`;
+    document.getElementById('privKeyDisplay').textContent = `(${currentKeys.n}, ${currentKeys.d})`;
+  }
+
+  const keySlider = document.getElementById('keySize');
+  const keySizeLabel = document.getElementById('keySizeLabel');
+
+  keySlider.addEventListener('input', () => {
+    const val = parseInt(keySlider.value);
+    keySizeLabel.textContent = val + ' 位';
+    generateKeys(val);
+    updateDisplay();
+    // clear outputs
+    document.getElementById('ciphertext').value = '';
+    document.getElementById('decrypted').value = '';
+    document.getElementById('demoResult').textContent = '';
+  });
+
+  document.getElementById('encryptBtn').addEventListener('click', () => {
+    const m = parseInt(document.getElementById('plaintext').value);
+    if (isNaN(m) || m < 0 || m >= currentKeys.n) {
+      document.getElementById('demoResult').textContent = `❌ 明文必须在 0 到 ${currentKeys.n - 1} 之间`;
+      return;
+    }
+    // encrypt
+    const c = modPow(m, currentKeys.e, currentKeys.n);
+    document.getElementById('ciphertext').value = c;
+    // decrypt
+    const dec = modPow(c, currentKeys.d, currentKeys.n);
+    document.getElementById('decrypted').value = dec;
+
+    const ok = dec === m;
+    document.getElementById('demoResult').innerHTML = ok
+      ? `✅ 解密成功！  明文 ${m} → 密文 ${c} → 解密 ${dec}`
+      : `❌ 解密失败：得到 ${dec}，期望 ${m}`;
+  });
+
+  // Initialize
+  updateDisplay();
+
+  // ===== Key size display for current 2-digit =====
+  // add p,q,n display
+  const demoResult = document.getElementById('demoResult');
+  const origClick = document.getElementById('encryptBtn').click;
+</script>
+
+</body>
+</html>

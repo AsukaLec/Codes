@@ -1,0 +1,174 @@
+# <center>SQL Experiment 3</center>
+## <center>202440012028 陈新安</center>
+
+
+###	1 找出Comp. Sci.系开设的具有3个学分的课程名称。（请将'Comp. Sci.'复制到查询的条件中）
+```sql
+SELECT title
+FROM course
+WHERE dept_name = 'Comp. Sci.' 
+  AND credits = 3;
+```
+
+<div style="display:flex; gap:2em; justify-content:center;">
+  <div style="text-align:center;">
+    <img src="photos\e1.1.png " width="500"/>
+  </div>
+</div>
+
+---
+
+###	2 找出教师的最高工资。
+```sql
+SELECT MAX(salary) AS max_salary
+FROM instructor;
+```
+<div style="display:flex; gap:2em; justify-content:center;">
+  <div style="text-align:center;">
+    <img src="photos\e1.2.png " width="500"/>
+  </div>
+</div>
+
+---
+
+### 3 找出工资最高的所有教师（可能有不止一位教师具有相同的工资）。
+```sql
+SELECT *
+FROM instructor
+WHERE instructor.salary = (SELECT MAX(salary) FROM instructor);
+```
+<div style="display:flex; gap:2em; justify-content:center;">
+  <div style="text-align:center;">
+    <img src="photos\e1.3.png " width="500"/>
+  </div>
+</div>
+
+---
+
+### 4 找出2009年秋季开设的每个课程段的选课人数。
+```sql
+SELECT course_id, sec_id, COUNT(ID) AS enrollment
+FROM takes
+WHERE year = 2009 AND semester = 'Fall'
+GROUP BY course_id, sec_id;
+```
+<div style="display:flex; gap:2em; justify-content:center;">
+  <div style="text-align:center;">
+    <img src="photos\e1.4.png " width="500"/>
+  </div>
+</div>
+
+---
+
+### 5 从2009年秋季开设的所有课程段中，找出最多的选课人数。
+```sql
+SELECT MAX(enrollment) AS max_enrollment
+FROM (
+    SELECT COUNT(ID) AS enrollment
+    FROM takes
+    WHERE year = 2009 AND semester = 'Fall'
+    GROUP BY course_id, sec_id
+) AS enrollment_counts;
+```
+<div style="display:flex; gap:2em; justify-content:center;">
+  <div style="text-align:center;">
+    <img src="photos\e1.5.png " width="500"/>
+  </div>
+</div>
+
+---
+
+### 6 找出在2009年秋季拥有最多选课人数的课程段。
+```sql
+SELECT course_id, sec_id, semester, COUNT(ID) AS enrollment
+FROM takes
+WHERE year = 2009 AND semester = 'Fall'
+GROUP BY course_id, sec_id, semester
+HAVING COUNT(ID) = (
+    SELECT MAX(enrollment)
+    FROM (
+        SELECT COUNT(ID) AS enrollment
+        FROM takes
+        WHERE year = 2009 AND semester = 'Fall'
+        GROUP BY course_id, sec_id
+    ) AS enrollment_counts
+);
+```
+
+<div style="display:flex; gap:2em; justify-content:center;">
+  <div style="text-align:center;">
+    <img src="photos\e1.6.png " width="500"/>
+  </div>
+</div>
+
+---
+
+
+
+### 7 找出所有至少选修了一门Comp. Sci.课程的学生姓名，保证结果中没有重复的姓名；
+
+**注： 共866人**
+
+
+```sql
+SELECT DISTINCT s.name
+FROM student s
+JOIN takes t ON s.ID = t.ID
+JOIN course c ON t.course_id = c.course_id
+WHERE c.dept_name = 'Comp. Sci.';
+```
+<div style="display:flex; gap:2em; justify-content:center;">
+  <div style="text-align:center;">
+    <img src="photos\e1.7.png " width="500"/>
+  </div>
+</div>
+
+---
+
+
+
+### 8 找出所有没有选修在2009年春季之前开设的任何课程的学生的ID和姓名；
+```sql
+SELECT ID, name
+FROM student
+WHERE ID NOT IN (
+    SELECT ID
+    FROM takes
+    WHERE year < 2009
+);
+
+```
+无查询结果
+
+---
+
+### 9 找出每个系教师的最高工资值。可以假设每个系至少有一位教师。
+```sql
+SELECT dept_name, MAX(salary) AS max_salary
+FROM instructor
+GROUP BY dept_name;
+```
+<div style="display:flex; gap:2em; justify-content:center;">
+  <div style="text-align:center;">
+    <img src="photos\e1.9.png " width="500"/>
+  </div>
+</div>
+
+---
+
+### 10 从前述查询（i）中所计算出的每个系最高工资中选出最低值 
+```sql
+SELECT MIN(max_salary) AS min_of_max_salaries
+FROM (
+    SELECT dept_name, MAX(salary) AS max_salary
+    FROM instructor
+    GROUP BY dept_name
+) AS dept_max_salaries;
+```
+<div style="display:flex; gap:2em; justify-content:center;">
+  <div style="text-align:center;">
+    <img src="photos\e1.10.png " width="500"/>
+  </div>
+</div>
+
+---
